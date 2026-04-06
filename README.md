@@ -1,5 +1,3 @@
-![Logo Viajar Faz Bem](https://viajarfazbem.com/images/logo-viajar-faz-bem-portal.svg)
-
 Este desafio tem como objetivo avaliar sua base em HTML, CSS, JavaScript e **Next.js**, além da sua capacidade de organizar uma interface, consumir uma API e estruturar uma pequena aplicação frontend.
 
 ## Objetivo do desafio
