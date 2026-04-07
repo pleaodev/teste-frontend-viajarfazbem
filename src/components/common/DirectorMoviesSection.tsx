@@ -47,6 +47,7 @@ export function DirectorMoviesSection() {
   // Novos estados para filtro e paginação
   const [selectedLetter, setSelectedLetter] = useState<string>("");
   const [moviePage, setMoviePage] = useState(1);
+  const [directorImgErrors, setDirectorImgErrors] = useState<Record<string, boolean>>({});
   const moviesPerPage = 4;
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -79,8 +80,7 @@ export function DirectorMoviesSection() {
       const movieIds = DIRECTOR_MOVIES_MAP[director.id];
       if (movieIds && movieIds.length > 0) {
         const res = await batchGetTitles(movieIds);
-        const validMovies = (res.titles || [])
-          .filter(movie => movie.primaryImage?.url);
+        const validMovies = res.titles || [];
           
         setDirectorMovies(validMovies);
       } else {
@@ -187,18 +187,23 @@ export function DirectorMoviesSection() {
               onClick={() => handleDirectorClick(director)}
             >
               <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedDirector?.id === director.id ? 'border-primary shadow-lg shadow-primary/20' : 'border-transparent'}`}>
-                {director.primaryImage?.url ? (
+                {(!directorImgErrors[director.id] && director.primaryImage?.url) ? (
                   <Image 
                     src={director.primaryImage.url} 
                     alt={director.displayName} 
                     width={128} 
                     height={128} 
                     className="object-cover w-full h-full bg-muted"
+                    onError={() => setDirectorImgErrors(prev => ({ ...prev, [director.id]: true }))}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground font-bold text-2xl">
-                    {director.displayName.charAt(0)}
-                  </div>
+                  <Image 
+                    src="/images/default/default-peaple.jpg"
+                    alt={director.displayName} 
+                    width={128} 
+                    height={128} 
+                    className="object-cover w-full h-full bg-muted"
+                  />
                 )}
               </div>
               <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedDirector?.id === director.id ? 'text-primary' : 'text-foreground'}`}>

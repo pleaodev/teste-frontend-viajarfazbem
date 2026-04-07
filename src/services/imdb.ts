@@ -55,6 +55,18 @@ export interface StarMeterResponse {
   names: StarMeterEntry[];
 }
 
+export interface FilmographyCredit {
+  title: Title;
+  category: string;
+  characters?: string[];
+}
+
+export interface FilmographyResponse {
+  credits: FilmographyCredit[];
+  totalCount?: number;
+  nextPageToken?: string;
+}
+
 // Helper genérico para fazer chamadas à API da IMDb
 async function fetchImdb<T>(endpoint: string, params?: Record<string, string | number>): Promise<T> {
   const url = new URL(`${API_BASE_URL}${endpoint}`);
@@ -126,4 +138,9 @@ export async function getStarMeter(): Promise<StarMeterResponse> {
 // Detalhes de uma pessoa
 export async function getPersonDetails(personId: string): Promise<StarMeterEntry> {
   return fetchImdb<StarMeterEntry>(`/names/${personId}`);
+}
+
+// Filmografia de uma pessoa
+export async function getPersonFilmography(personId: string, params?: { limit?: number; pageToken?: string }): Promise<FilmographyResponse> {
+  return fetchImdb<FilmographyResponse>(`/names/${personId}/filmography`, params);
 }

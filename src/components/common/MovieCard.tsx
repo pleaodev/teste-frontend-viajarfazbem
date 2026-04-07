@@ -16,9 +16,16 @@ export function MovieCard({ movie }: MovieCardProps) {
   const [isDetailsClosing, setIsDetailsClosing] = useState(false);
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    setImgError(false);
+    setActorImgErrors({});
+  }, [movie.id]);
 
   const rating = movie.rating?.aggregateRating?.toFixed(1) || "N/A";
-  const image = movie.primaryImage?.url || "/images/placeholder.jpg";
+  const image = (!imgError && movie.primaryImage?.url) ? movie.primaryImage.url : "/images/default/default-movie.jpg";
 
   const closeTrailer = () => {
     setIsTrailerClosing(true);
@@ -79,19 +86,14 @@ export function MovieCard({ movie }: MovieCardProps) {
       <div className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg">
       {/* Imagem do Filme */}
       <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0">
-        {movie.primaryImage?.url ? (
-          <Image
-            src={movie.primaryImage.url}
-            alt={movie.primaryTitle}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover:scale-105 will-change-transform [backface-visibility:hidden]"
-          />
-        ) : (
-          <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
-            Sem Imagem
-          </div>
-        )}
+        <Image
+          src={image}
+          alt={movie.primaryTitle}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover:scale-105 will-change-transform [backface-visibility:hidden]"
+          onError={() => setImgError(true)}
+        />
         
         {/* Rating Flutuante */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 backdrop-blur-md px-2.5 py-1 text-sm font-medium text-yellow-500 border border-white/10 shadow-sm">
@@ -109,18 +111,23 @@ export function MovieCard({ movie }: MovieCardProps) {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-help transition-transform duration-200 group-hover/avatar:scale-110">
-                  {actor.primaryImage?.url ? (
+                  {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
                     <Image 
                       src={actor.primaryImage.url} 
                       alt={actor.displayName} 
                       width={40} 
                       height={40} 
                       className="object-cover w-full h-full shadow-xx-xl border rounded-full bg-transparent/50"
+                      onError={() => setActorImgErrors(prev => ({ ...prev, [actor.id]: true }))}
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-full h-full text-muted-foreground bg-muted text-xs font-bold">
-                      {actor.displayName.charAt(0)}
-                    </div>
+                    <Image 
+                      src="/images/default/default-peaple.jpg"
+                      alt={actor.displayName} 
+                      width={40} 
+                      height={40} 
+                      className="object-cover w-full h-full shadow-xx-xl border rounded-full bg-transparent/50"
+                    />
                   )}
                 </div>
                 

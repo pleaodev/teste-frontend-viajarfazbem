@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
-import { getStarMeter, searchTitles, Title, StarMeterEntry } from "@/services/imdb";
+import { getStarMeter, getPersonFilmography, Title, StarMeterEntry } from "@/services/imdb";
 import { MovieCard } from "./MovieCard";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
@@ -19,6 +19,7 @@ export function ActorMoviesSection() {
   // Novos estados para filtro e paginação
   const [selectedLetter, setSelectedLetter] = useState<string>("");
   const [moviePage, setMoviePage] = useState(1);
+  const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
   const moviesPerPage = 4;
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -49,12 +50,24 @@ export function ActorMoviesSection() {
     setMoviePage(1); // reseta a página ao mudar de ator
     
     try {
-      // Busca títulos relacionados ao ator com limite maior para ter várias páginas
-      const res = await searchTitles(actor.displayName, { limit: 50 });
-      const validMovies = (res.titles || [])
-        .filter(movie => movie.primaryImage?.url);
+      const res = await getPersonFilmography(actor.id);
+      
+      const validMovies = (res.credits || [])
+        .filter(credit => 
+          (credit.category === "actor" || credit.category === "actress") && 
+          credit.title?.type === "movie"
+        )
+        .map(credit => credit.title);
         
-      setActorMovies(validMovies);
+      // Remove duplicatas
+      const uniqueMoviesMap = new Map<string, Title>();
+      validMovies.forEach(movie => {
+        if (!uniqueMoviesMap.has(movie.id)) {
+          uniqueMoviesMap.set(movie.id, movie);
+        }
+      });
+        
+      setActorMovies(Array.from(uniqueMoviesMap.values()));
     } catch (error) {
       console.error("Falha ao buscar filmes do ator:", error);
     } finally {
@@ -156,18 +169,23 @@ export function ActorMoviesSection() {
               onClick={() => handleActorClick(actor)}
             >
               <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedActor?.id === actor.id ? 'border-primary shadow-lg shadow-primary/20' : 'border-transparent'}`}>
-                {actor.primaryImage?.url ? (
+                {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
                   <Image 
                     src={actor.primaryImage.url} 
                     alt={actor.displayName} 
                     width={128} 
                     height={128} 
                     className="object-cover w-full h-full bg-muted"
+                    onError={() => setActorImgErrors(prev => ({ ...prev, [actor.id]: true }))}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground font-bold text-2xl">
-                    {actor.displayName.charAt(0)}
-                  </div>
+                  <Image 
+                    src="/images/default/default-peaple.jpg"
+                    alt={actor.displayName} 
+                    width={128} 
+                    height={128} 
+                    className="object-cover w-full h-full bg-muted"
+                  />
                 )}
               </div>
               <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedActor?.id === actor.id ? 'text-primary' : 'text-foreground'}`}>
