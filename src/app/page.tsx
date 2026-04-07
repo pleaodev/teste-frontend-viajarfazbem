@@ -2,6 +2,7 @@ import { getTitles } from "@/services/imdb";
 import { Carousel } from "@/components/common/Carousel";
 import { AllMoviesSection } from "@/components/common/AllMoviesSection";
 import { ActorMoviesSection } from "@/components/common/ActorMoviesSection";
+import { DirectorMoviesSection } from "@/components/common/DirectorMoviesSection";
 
 export default async function Home({
   searchParams,
@@ -37,6 +38,9 @@ export default async function Home({
 
       {/* Seção de Listagem de Filmes por Atores */}
       <ActorMoviesSection />
+
+      {/* Seção de Listagem de Filmes por Diretores */}
+      <DirectorMoviesSection />
     </div>
   );
 }

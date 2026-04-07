@@ -92,6 +92,22 @@ export async function getTitles(params?: {
   return fetchImdb<TitlesResponse>("/titles", params);
 }
 
+// Busca múltiplos títulos por ID
+export async function batchGetTitles(titleIds: string[]): Promise<TitlesResponse> {
+  const url = new URL(`${API_BASE_URL}/titles:batchGet`);
+  titleIds.forEach(id => url.searchParams.append("title_ids", id));
+  
+  const response = await fetch(url.toString(), {
+    next: { revalidate: 3600 }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erro na API IMDb: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
 //Busca títulos por texto
 export async function searchTitles(query: string, params?: { page?: number; limit?: number }): Promise<SearchResponse> {
   return fetchImdb<SearchResponse>("/search/titles", { query: query, ...params });
@@ -105,4 +121,9 @@ export async function getTitleDetails(titleId: string, params?: { info?: string 
 // Rankings para montar destaques de nomes conhecidos
 export async function getStarMeter(): Promise<StarMeterResponse> {
   return fetchImdb<StarMeterResponse>("/chart/starmeter");
+}
+
+// Detalhes de uma pessoa
+export async function getPersonDetails(personId: string): Promise<StarMeterEntry> {
+  return fetchImdb<StarMeterEntry>(`/names/${personId}`);
 }
