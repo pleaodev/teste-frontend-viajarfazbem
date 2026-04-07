@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header, Footer } from "@/components/common";
+import { Header, Footer, ScrollToTop } from "@/components/common";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import "./globals.css";
 
@@ -42,6 +42,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>
