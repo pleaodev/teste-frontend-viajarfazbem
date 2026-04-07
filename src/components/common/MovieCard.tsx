@@ -1,5 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, Film, Info, X } from "lucide-react";
 import { Title } from "@/services/imdb";
 
 interface MovieCardProps {
@@ -7,11 +10,13 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
+  const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const rating = movie.rating?.aggregateRating?.toFixed(1) || "N/A";
-  const image = movie.primaryImage?.url || "/images/placeholder.jpg"; // Substitua se houver um placeholder
+  const image = movie.primaryImage?.url || "/images/placeholder.jpg";
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <>
+      <div className="group relative flex flex-col overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       {/* Imagem do Filme */}
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
         {movie.primaryImage?.url ? (
@@ -55,11 +60,49 @@ export function MovieCard({ movie }: MovieCardProps) {
           {movie.plot || "Descrição não disponível para este título."}
         </p>
 
-        {/* Botão Ver Mais */}
-        <button className="mt-auto w-full rounded-md bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600/20 py-2.5 text-sm font-semibold transition-all duration-300">
-          Ver Mais
-        </button>
+        {/* Botões */}
+        <div className="mt-auto flex items-center gap-2">
+          <button className="flex-1 flex items-center justify-center gap-2 rounded-md bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600/20 py-2.5 text-sm font-semibold transition-all duration-300">
+            <Info className="h-4 w-4" />
+            Ver Mais
+          </button>
+          <button 
+            onClick={() => setIsTrailerOpen(true)}
+            className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300"
+            title="Assistir Trailer"
+          >
+            <Film className="h-4 w-4" />
+            Trailer
+          </button>
+        </div>
       </div>
     </div>
+
+    {/* Dialog do Trailer */}
+    {isTrailerOpen && (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+        <div className="relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+          {/* Botão Fechar */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsTrailerOpen(false);
+            }}
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 transition-colors border border-white/20"
+          >
+            <X className="h-5 w-5" />
+          </button>
+
+          {/* Vídeo do YouTube (Busca automática pelo título do filme) */}
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(movie.primaryTitle + " trailer")}&autoplay=1`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

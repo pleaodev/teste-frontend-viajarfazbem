@@ -7,18 +7,16 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
-  // Função para gerar os botões visíveis (máximo de 4 botões)
   const getVisiblePages = () => {
-    // Se o total de páginas for 4 ou menos, mostra todas
     if (totalPages <= 4) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
     // Calcula o início e o fim da janela de 4 páginas
-    let start = currentPage - 1; // Tenta colocar a página atual na segunda posição
-    let end = start + 3; // +3 porque já temos o 'start', totalizando 4 páginas
+    let start = currentPage - 1;
+    let end = start + 3;
 
-    // Ajustes de limites (não pode passar de 1 nem de totalPages)
+    // Ajustes de limites
     if (start < 1) {
       start = 1;
       end = 4;

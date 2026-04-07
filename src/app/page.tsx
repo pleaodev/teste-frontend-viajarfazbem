@@ -11,9 +11,6 @@ export default async function Home({
   const params = await searchParams;
   const page = Number(params?.page) || 1;
   const limit = 4;
-
-  // Como a API da IMDb retorna 50 itens e ignora paginação direta via params
-  // Buscamos os 50 itens mais populares uma única vez e dividimos no frontend.
   const response = await getTitles({
     titleType: "movie",
     sort_by: "SORT_BY_POPULARITY",
