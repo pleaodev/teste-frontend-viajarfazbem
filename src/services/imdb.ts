@@ -14,6 +14,8 @@ export interface Title {
     aggregateRating: number;
     voteCount: number;
   };
+  plot?: string;
+  genres?: string[];
 }
 
 export interface SearchResponse {
