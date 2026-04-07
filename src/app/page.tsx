@@ -103,7 +103,6 @@ export default async function Home({
           <h2 className="text-3xl font-bold tracking-tight">Todos os Filmes</h2>
           <div className="flex items-center gap-4">
             <MovieFilterBar />
-            <span className="text-sm text-muted-foreground hidden sm:block">Página {page}</span>
           </div>
         </div>
 
@@ -114,7 +113,12 @@ export default async function Home({
               <p className="text-muted-foreground">Atingimos o limite de requisições da API. Por favor, aguarde alguns instantes e tente novamente.</p>
             </div>
             {/* Mantém a paginação visível mesmo em caso de erro, permitindo que o usuário volte para uma página válida */}
-            <Pagination currentPage={page} totalPages={Math.max(1, page - 1)} />
+            <div className="w-full flex flex-col md:flex-row items-center justify-between mt-8 py-8 border-t border-border/50">
+              <Pagination currentPage={page} totalPages={Math.max(1, page - 1)} />
+              <div className="text-sm text-muted-foreground font-medium mt-4 md:mt-0">
+                Página {page}
+              </div>
+            </div>
           </>
         ) : listMovies.length > 0 ? (
           <>
@@ -124,7 +128,12 @@ export default async function Home({
               ))}
             </div>
             
-            <Pagination currentPage={page} totalPages={totalPages} />
+            <div className="w-full flex flex-col md:flex-row items-center justify-between mt-8 py-8 border-t border-border/50">
+              <Pagination currentPage={page} totalPages={totalPages} />
+              <div className="text-sm text-muted-foreground font-medium mt-4 md:mt-0">
+                Página {page}
+              </div>
+            </div>
           </>
         ) : (
           <>
@@ -133,7 +142,12 @@ export default async function Home({
             </div>
             
             {/* Mantém a paginação visível mesmo sem resultados, permitindo que o usuário volte */}
-            <Pagination currentPage={page} totalPages={totalPages} />
+            <div className="w-full flex flex-col md:flex-row items-center justify-between mt-8 py-8 border-t border-border/50">
+              <Pagination currentPage={page} totalPages={totalPages} />
+              <div className="text-sm text-muted-foreground font-medium mt-4 md:mt-0">
+                Página {page}
+              </div>
+            </div>
           </>
         )}
       </section>
