@@ -2,23 +2,26 @@ export const API_BASE_URL = "https://api.imdbapi.dev";
 
 export interface Title {
   id: string;
-  title: string;
-  year?: number;
-  image?: {
+  primaryTitle: string;
+  startYear?: number;
+  primaryImage?: {
     url: string;
     width: number;
     height: number;
   };
-  titleType?: string;
-  rating?: number;
+  type?: string;
+  rating?: {
+    aggregateRating: number;
+    voteCount: number;
+  };
 }
 
 export interface SearchResponse {
-  results: Title[];
+  titles: Title[];
 }
 
 export interface TitlesResponse {
-  results: Title[];
+  titles: Title[];
 }
 
 export interface TitleDetails extends Title {
@@ -66,7 +69,15 @@ async function fetchImdb<T>(endpoint: string, params?: Record<string, string | n
 }
 
 // Lista títulos
-export async function getTitles(params?: { page?: number; limit?: number; genre?: string }): Promise<TitlesResponse> {
+export async function getTitles(params?: { 
+  page?: number; 
+  limit?: number; 
+  genre?: string;
+  titleType?: string;
+  sort_by?: string;
+  sort_order?: string;
+  startYear?: number;
+}): Promise<TitlesResponse> {
   return fetchImdb<TitlesResponse>("/titles", params);
 }
 
