@@ -70,7 +70,7 @@ async function fetchImdb<T>(endpoint: string, params?: Record<string, string | n
   }
 
   const response = await fetch(url.toString(), {
-    // Cache do Next.js
+    next: { revalidate: 3600 } 
   });
 
   if (!response.ok) {
@@ -96,7 +96,7 @@ export async function getTitles(params?: {
 
 //Busca títulos por texto
 export async function searchTitles(query: string, params?: { page?: number; limit?: number }): Promise<SearchResponse> {
-  return fetchImdb<SearchResponse>("/search/titles", { q: query, ...params });
+  return fetchImdb<SearchResponse>("/search/titles", { query: query, ...params });
 }
 
 // Detalhes de um título específico

@@ -37,24 +37,6 @@ export function MovieCard({ movie }: MovieCardProps) {
   };
 
   useEffect(() => {
-    let isMounted = true;
-    
-    const fetchActorsSilently = async () => {
-      try {
-        const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
-        if (isMounted) {
-          setMovieDetails(details);
-        }
-      } catch (error) {
-        console.error("Silent fetch failed", error);
-      }
-    };
-
-    fetchActorsSilently();
-
-    return () => {
-      isMounted = false;
-    };
   }, [movie.id]);
 
   const handleOpenDetails = async () => {
@@ -142,7 +124,7 @@ export function MovieCard({ movie }: MovieCardProps) {
       {/* Conteúdo do Card */}
       <div className="flex flex-1 flex-col p-5">
         <div className="mb-2 flex items-start justify-between gap-2">
-          <h3 className="font-bold text-lg leading-tight line-clamp-1 group-hover:text-blue-500 transition-colors" title={movie.primaryTitle}>
+          <h3 className="font-bold text-lg leading-tight line-clamp-1 group-hover:text-sky-500 transition-colors" title={movie.primaryTitle}>
             {movie.primaryTitle}
           </h3>
           {movie.startYear && (
@@ -160,7 +142,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         <div className="mt-auto flex items-center gap-2">
           <button 
             onClick={handleOpenDetails}
-            className="flex-1 flex items-center justify-center gap-2 rounded-md bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-2 rounded-md bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white border border-sky-500/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
           >
             <Info className="h-4 w-4" />
             Ver Mais
