@@ -37,6 +37,24 @@ export function MovieCard({ movie }: MovieCardProps) {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchActorsSilently = async () => {
+      try {
+        const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
+        if (isMounted) {
+          setMovieDetails(details);
+        }
+      } catch (error) {
+        console.error("Silent fetch failed", error);
+      }
+    };
+
+    fetchActorsSilently();
+
+    return () => {
+      isMounted = false;
+    };
   }, [movie.id]);
 
   const handleOpenDetails = async () => {
