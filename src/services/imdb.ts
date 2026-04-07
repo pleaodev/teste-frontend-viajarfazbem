@@ -45,16 +45,14 @@ export interface TitleDetails extends Title {
 
 export interface StarMeterEntry {
   id: string;
-  name: string;
-  rank: number;
-  previousRank?: number;
-  image?: {
+  displayName: string;
+  primaryImage?: {
     url: string;
   };
 }
 
 export interface StarMeterResponse {
-  results: StarMeterEntry[];
+  names: StarMeterEntry[];
 }
 
 // Helper genérico para fazer chamadas à API da IMDb

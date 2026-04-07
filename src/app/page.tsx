@@ -3,6 +3,7 @@ import { Carousel } from "@/components/common/Carousel";
 import { MovieCard } from "@/components/common/MovieCard";
 import { Pagination } from "@/components/common/Pagination";
 import { MovieFilterBar } from "@/components/common/MovieFilterBar";
+import { ActorMoviesSection } from "@/components/common/ActorMoviesSection";
 
 export default async function Home({
   searchParams,
@@ -151,6 +152,9 @@ export default async function Home({
           </>
         )}
       </section>
+
+      {/* Nova Seção de Filmes por Atores */}
+      <ActorMoviesSection />
     </div>
   );
 }
