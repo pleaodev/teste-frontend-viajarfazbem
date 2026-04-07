@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, Film, Info, X, Clock, Calendar, Users, Clapperboard, Loader2 } from "lucide-react";
+import { Star, Film, Info, X, Users, Clock, Calendar, Ticket } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 
 interface MovieCardProps {
@@ -36,6 +36,27 @@ export function MovieCard({ movie }: MovieCardProps) {
     }, 300);
   };
 
+  useEffect(() => {
+    let isMounted = true;
+    
+    const fetchActorsSilently = async () => {
+      try {
+        const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
+        if (isMounted) {
+          setMovieDetails(details);
+        }
+      } catch (error) {
+        console.error("Silent fetch failed", error);
+      }
+    };
+
+    fetchActorsSilently();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [movie.id]);
+
   const handleOpenDetails = async () => {
     setIsDetailsOpen(true);
     if (!movieDetails) {
@@ -51,21 +72,23 @@ export function MovieCard({ movie }: MovieCardProps) {
     }
   };
 
+  const topActors = movieDetails?.stars?.slice(0, 3) || [];
+
   return (
     <>
-      <div className="group relative flex flex-col overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg">
       {/* Imagem do Filme */}
-      <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
+      <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0">
         {movie.primaryImage?.url ? (
           <Image
             src={movie.primaryImage.url}
             alt={movie.primaryTitle}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover:scale-105 will-change-transform [backface-visibility:hidden]"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+          <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
             Sem Imagem
           </div>
         )}
@@ -76,8 +99,44 @@ export function MovieCard({ movie }: MovieCardProps) {
           <span>{rating}</span>
         </div>
 
+        {/* Avatares Flutuantes dos Atores */}
+        {topActors.length > 0 && (
+          <div className="absolute left-3 bottom-3 flex flex-col gap-2 rounded-full z-10">
+            {topActors.map((actor, index) => (
+              <div 
+                key={actor.id} 
+                className="group/avatar relative"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-help transition-transform duration-200 group-hover/avatar:scale-110">
+                  {actor.primaryImage?.url ? (
+                    <Image 
+                      src={actor.primaryImage.url} 
+                      alt={actor.displayName} 
+                      width={40} 
+                      height={40} 
+                      className="object-cover w-full h-full shadow-xx-xl border rounded-full bg-transparent/50"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full text-muted-foreground bg-muted text-xs font-bold">
+                      {actor.displayName.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Tooltip */}
+                <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 bg-black/90 text-white text-xs font-medium whitespace-nowrap px-2.5 py-1.5 rounded-md pointer-events-none border border-white/10 backdrop-blur-md z-20 shadow-xl">
+                  {actor.displayName}
+                  {/* Seta do tooltip */}
+                  <div className="absolute top-1/2 -translate-y-1/2 -left-[4px] border-y-[4px] border-y-transparent border-r-[4px] border-r-black/90" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Gradiente inferior para melhor legibilidade */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-card via-card/80 to-transparent pointer-events-none" />
       </div>
 
       {/* Conteúdo do Card */}
@@ -101,14 +160,14 @@ export function MovieCard({ movie }: MovieCardProps) {
         <div className="mt-auto flex items-center gap-2">
           <button 
             onClick={handleOpenDetails}
-            className="flex-1 flex items-center justify-center gap-2 rounded-md bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600/20 py-2.5 text-sm font-semibold transition-all duration-300"
+            className="flex-1 flex items-center justify-center gap-2 rounded-md bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
           >
             <Info className="h-4 w-4" />
             Ver Mais
           </button>
           <button 
             onClick={() => setIsTrailerOpen(true)}
-            className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300"
+            className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
             title="Assistir Trailer"
           >
             <Film className="h-4 w-4" />
@@ -128,7 +187,7 @@ export function MovieCard({ movie }: MovieCardProps) {
               e.stopPropagation();
               closeTrailer();
             }}
-            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 transition-colors border border-white/20"
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-white/20 transition-colors border border-white/20 cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -154,7 +213,7 @@ export function MovieCard({ movie }: MovieCardProps) {
               e.stopPropagation();
               closeDetails();
             }}
-            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 transition-colors border border-white/20"
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-white/20 transition-colors border border-white/20 cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -211,7 +270,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                 {movieDetails?.genres && movieDetails.genres.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {movieDetails.genres.map(genre => (
-                      <span key={genre} className="px-3 py-1 rounded-full bg-blue-600/10 text-blue-500 text-xs font-medium border border-blue-600/20">
+                      <span key={genre} className="px-3 py-1 rounded-full bg-blue-600/10 text-blue-600 border border-blue-600/20 text-sm font-medium">
                         {genre}
                       </span>
                     ))}
@@ -219,17 +278,19 @@ export function MovieCard({ movie }: MovieCardProps) {
                 )}
 
                 {/* Sinopse */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-border pb-2">
-                    <Info className="h-5 w-5 text-blue-500" />
-                    Sinopse
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {movieDetails?.plot || movie.plot || "Nenhuma sinopse disponível para este título."}
-                  </p>
-                </div>
+                {movieDetails.plot && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-border pb-2">
+                      <Info className="h-5 w-5 text-blue-500" />
+                      Sinopse
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {movieDetails.plot}
+                    </p>
+                  </div>
+                )}
 
-                {/* Elenco */}
+                {/* Atores / Elenco */}
                 {movieDetails?.stars && movieDetails.stars.length > 0 && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 border-b border-border pb-2">
