@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, Film, Info, X, Users, Clock, Calendar, Ticket } from "lucide-react";
+import { Star, Film, Info, X, Users, Clock, Calendar, Ticket, Loader2, Clapperboard } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 
 interface MovieCardProps {
@@ -136,7 +136,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         )}
 
         {/* Gradiente inferior para melhor legibilidade */}
-        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-card via-card/80 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none" />
       </div>
 
       {/* Conteúdo do Card */}
@@ -278,7 +278,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                 )}
 
                 {/* Sinopse */}
-                {movieDetails.plot && (
+                {movieDetails?.plot && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-border pb-2">
                       <Info className="h-5 w-5 text-blue-500" />
