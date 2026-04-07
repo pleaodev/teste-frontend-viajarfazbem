@@ -26,9 +26,9 @@ export default async function Home({
   const listMovies = allMovies.slice((page - 1) * limit, page * limit);
 
   return (
-    <div className="flex flex-col gap-12 pb-12 pt-8">
+    <div className="flex flex-col gap-12 pb-12">
       {/* Seção do Carrossel Hero */}
-      <section className="container mx-auto px-4 w-full">
+      <section className="w-full">
         <Carousel items={topMovies} />
       </section>
       
