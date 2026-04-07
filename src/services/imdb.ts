@@ -26,11 +26,21 @@ export interface TitlesResponse {
   titles: Title[];
 }
 
+export interface CastMember {
+  id: string;
+  displayName: string;
+  primaryImage?: { url: string };
+  primaryProfessions?: string[];
+}
+
 export interface TitleDetails extends Title {
   plot?: string;
   genres?: string[];
   runtimeMinutes?: number;
   releaseDate?: string;
+  stars?: CastMember[];
+  directors?: CastMember[];
+  writers?: CastMember[];
 }
 
 export interface StarMeterEntry {
@@ -90,8 +100,8 @@ export async function searchTitles(query: string, params?: { page?: number; limi
 }
 
 // Detalhes de um título específico
-export async function getTitleDetails(titleId: string): Promise<TitleDetails> {
-  return fetchImdb<TitleDetails>(`/titles/${titleId}`);
+export async function getTitleDetails(titleId: string, params?: { info?: string }): Promise<TitleDetails> {
+  return fetchImdb<TitleDetails>(`/titles/${titleId}`, params);
 }
 
 // Rankings para montar destaques de nomes conhecidos
