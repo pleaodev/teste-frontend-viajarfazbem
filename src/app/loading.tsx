@@ -1,19 +1,12 @@
-import { Loader2 } from "lucide-react";
-import Image from "next/image";
+"use client";
+
+import { CircularProgress } from "@mui/material";
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center gap-6 w-full animate-fade-in">
-      <Image 
-        src="/images/brands/logo-viajar-faz-bem-portal.svg" 
-        alt="ViajarFazBem Logo" 
-        width={150} 
-        height={41} 
-        className="dark:brightness-0 dark:invert animate-pulse"
-        priority
-      />
-      <div className="flex items-center gap-3 text-muted-foreground">
-        <Loader2 className="h-6 w-6 animate-spin" />
+    <div className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center gap-6 w-full">
+      <div className="flex items-center justify-center text-muted-foreground">
+        <CircularProgress size={64} color="inherit" />
       </div>
     </div>
   );
