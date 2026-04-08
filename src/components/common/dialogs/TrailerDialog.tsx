@@ -36,7 +36,7 @@ export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
 
   return createPortal(
     <div 
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-white/90 dark:bg-black/90 p-4 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+      className={`fixed inset-0 z-[10010] flex items-center justify-center bg-white/90 dark:bg-black/90 p-4 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
       role="dialog"
       aria-modal="true"

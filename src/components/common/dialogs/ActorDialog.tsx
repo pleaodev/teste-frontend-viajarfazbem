@@ -77,7 +77,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
 
   return createPortal(
     <div 
-      className={`fixed inset-0 z-[110] flex items-center justify-center bg-white/80 dark:bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+      className={`fixed inset-0 z-[10010] flex items-center justify-center bg-white/80 dark:bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
@@ -93,7 +93,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
             e.stopPropagation();
             handleClose();
           }}
-          className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-black/50 text-foreground dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition-colors border border-black/10 dark:border-white/20 cursor-pointer"
+          className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur-sm hover:bg-background transition-colors border border-border shadow-sm cursor-pointer"
         >
           <X className="h-5 w-5" />
         </button>
