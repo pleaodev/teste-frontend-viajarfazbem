@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { IconButton, Divider } from "@mui/material";
 import { 
   Menu, 
@@ -70,18 +71,21 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
         onClose={toggleMainMenu} 
         position="left"
         title={
-          <Image 
-            src="/images/brands/logo-viajar-faz-bem-portal.svg" 
-            alt="ViajarFazBem Logo" 
-            width={100} 
-            height={26} 
-            style={{ width: "100px", height: "auto" }}
-            className="dark:brightness-0 dark:invert"
-          />
+          <Link href="/" onClick={toggleMainMenu}>
+            <Image 
+              src="/images/brands/logo-viajar-faz-bem-portal.svg" 
+              alt="ViajarFazBem Logo" 
+              width={100} 
+              height={26} 
+              style={{ width: "100px", height: "auto" }}
+              className="dark:brightness-0 dark:invert"
+            />
+          </Link>
         }
       >
         <div className="flex flex-col gap-3">
-          <div 
+          <Link 
+            href="/"
             onClick={toggleMainMenu}
             className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
           >
@@ -89,7 +93,7 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
               <HomeOutlined className="text-muted-foreground" fontSize="small" />
               <span className="text-sm font-medium">Home</span>
             </div>
-          </div>
+          </Link>
 
           <div 
             onClick={() => openListDrawer("Top 10 Filmes", topMovies)}

@@ -1,19 +1,23 @@
 import Image from "next/image";
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="w-full border-t border-border bg-background mt-auto py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:grid md:grid-cols-3 gap-8">
           <div>
-            <Image 
-              src="/images/brands/logo-viajar-faz-bem-portal.svg" 
-              alt="ViajarFazBem Logo" 
-              width={150} 
-              height={41} 
-              style={{ width: "150px", height: "41px" }}
-              priority
-              className="dark:brightness-0 dark:invert"
-            />
+            <Link href="/">
+              <Image 
+                src="/images/brands/logo-viajar-faz-bem-portal.svg" 
+                alt="ViajarFazBem Logo" 
+                width={150} 
+                height={41} 
+                style={{ width: "150px", height: "41px" }}
+                priority
+                className="dark:brightness-0 dark:invert"
+              />
+            </Link>
             <p className="text-base md:text-sm text-muted-foreground mt-5">
               Sua plataforma para viajar nos melhores filmes e séries.
             </p>

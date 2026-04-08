@@ -18,7 +18,8 @@ import {
   Button,
   Slider,
   CircularProgress,
-  LinearProgress
+  LinearProgress,
+  InputAdornment
 } from "@mui/material";
 import { Search, FilterList, Close } from "@mui/icons-material";
 import { useLenis } from "lenis/react";
@@ -226,7 +227,16 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           onChange={(e) => setSearchQuery(e.target.value)}
           slotProps={{
             input: {
-              startAdornment: <Search className="text-muted-foreground mr-2 shrink-0" fontSize="small" />,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search className="text-muted-foreground shrink-0" fontSize="small" />
+                </InputAdornment>
+              ),
+              endAdornment: (isTyping || isPending) ? (
+                <InputAdornment position="end">
+                  <CircularProgress size={20} className="text-sky-500" />
+                </InputAdornment>
+              ) : null,
               className: "bg-card text-foreground rounded-md w-full sm:w-64 md:w-56 lg:w-80 h-[42px]",
             }
           }}
