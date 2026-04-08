@@ -7,6 +7,7 @@ import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
 import { ActorDialog } from "../dialogs/ActorDialog";
+import { useFavorites } from "../providers/FavoritesProvider";
 
 interface CarouselProps {
   items: Title[];
@@ -20,15 +21,7 @@ export function Carousel({ items }: CarouselProps) {
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
-
-  const toggleFavorite = (movieId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setFavorites(prev => ({
-      ...prev,
-      [movieId]: !prev[movieId]
-    }));
-  };
+  const { toggleFavorite, isFavorite } = useFavorites();
   
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
@@ -189,12 +182,15 @@ export function Carousel({ items }: CarouselProps) {
                       Trailer
                     </button>
                     <button
-                      onClick={(e) => toggleFavorite(item.id, e)}
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${favorites[item.id] ? 'bg-black/40 hover:bg-black/60' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
-                      aria-label={favorites[item.id] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-                      aria-pressed={favorites[item.id] || false}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(item);
+                      }}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(item.id) ? 'bg-black/40 hover:bg-black/60' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
+                      aria-label={isFavorite(item.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                      aria-pressed={isFavorite(item.id)}
                     >
-                      <Heart className={`h-5 w-5 transition-colors duration-300 ${favorites[item.id] ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
+                      <Heart className={`h-5 w-5 transition-colors duration-300 ${isFavorite(item.id) ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
                     </button>
                   </div>
                 </div>

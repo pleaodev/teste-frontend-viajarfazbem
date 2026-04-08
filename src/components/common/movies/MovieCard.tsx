@@ -7,6 +7,7 @@ import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { ActorDialog } from "../dialogs/ActorDialog";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
+import { useFavorites } from "../providers/FavoritesProvider";
 
 interface MovieCardProps {
   movie: Title;
@@ -23,12 +24,13 @@ export function MovieCard({ movie }: MovieCardProps) {
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
   const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(movie.id);
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsFavorite((prev) => !prev);
+    toggleFavorite(movie);
   };
 
   const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
@@ -167,11 +169,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         {/* Botão Favoritar (Coração) */}
         <button
           onClick={handleToggleFavorite}
-          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${isFavorite ? 'bg-black/40 hover:bg-black/60' : 'bg-black/20 hover:bg-black/50 text-white/90 hover:text-white'}`}
-          aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-          aria-pressed={isFavorite}
+          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${favorite ? 'bg-black/40 hover:bg-black/60' : 'bg-black/20 hover:bg-black/50 text-white/90 hover:text-white'}`}
+          aria-label={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          aria-pressed={favorite}
         >
-          <Heart className={`h-4 w-4 transition-colors duration-300 ${isFavorite ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
+          <Heart className={`h-4 w-4 transition-colors duration-300 ${favorite ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
         </button>
 
         {/* Avatares Flutuantes dos Atores */}

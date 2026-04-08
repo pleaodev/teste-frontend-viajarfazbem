@@ -6,6 +6,7 @@ export * from './layout/MobileMenu';
 export * from './layout/MovieListDrawer';
 export * from './providers/ThemeProvider';
 export * from './providers/LenisProvider';
+export * from './providers/FavoritesProvider';
 export * from './ui/ThemeToggle';
 export * from './ui/Carousel';
 export * from './ui/ScrollToTop';

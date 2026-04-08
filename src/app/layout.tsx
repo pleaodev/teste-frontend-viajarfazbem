@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Header, Footer, ScrollToTop, LenisProvider, ThemeProvider } from "@/components/common";
+import { Header, Footer, ScrollToTop, LenisProvider, ThemeProvider, FavoritesProvider } from "@/components/common";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -71,14 +71,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LenisProvider>
-            <Suspense>
-              <Header />
-            </Suspense>
-            <main className="flex-1 w-full flex flex-col">
-              {children}
-            </main>
-            <Footer />
-            <ScrollToTop />
+            <FavoritesProvider>
+              <Suspense>
+                <Header />
+              </Suspense>
+              <main className="flex-1 w-full flex flex-col">
+                {children}
+              </main>
+              <Footer />
+              <ScrollToTop />
+            </FavoritesProvider>
           </LenisProvider>
         </ThemeProvider>
       </body>

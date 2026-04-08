@@ -64,6 +64,9 @@ export async function Header() {
         <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer py-2">
           Home
         </Link>
+        <Link href="/favorites" className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer py-2">
+          Favoritos
+        </Link>
         <FlyoutMenu label="Top 10 Filmes" items={topMovies} />
         <FlyoutMenu label="Lançamentos" items={latestMovies} />
         <FlyoutMenu label="Clássicos" items={classicMovies} />
