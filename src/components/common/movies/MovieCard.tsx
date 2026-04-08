@@ -112,7 +112,22 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   return (
     <>
-      <article className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg">
+      <article 
+        itemScope 
+        itemType="https://schema.org/Movie"
+        className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg"
+      >
+        <meta itemProp="name" content={movie.primaryTitle} />
+        <meta itemProp="image" content={image} />
+        {movie.plot && <meta itemProp="description" content={movie.plot} />}
+        {movie.startYear && <meta itemProp="datePublished" content={movie.startYear.toString()} />}
+        {movie.rating?.aggregateRating && (
+          <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating" className="hidden">
+            <meta itemProp="ratingValue" content={movie.rating.aggregateRating.toString()} />
+            <meta itemProp="ratingCount" content={movie.rating.voteCount?.toString() || "1"} />
+          </div>
+        )}
+        
       {/* Imagem do Filme */}
       <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0">
         <Image
@@ -136,11 +151,15 @@ export function MovieCard({ movie }: MovieCardProps) {
             {topActors.map((actor, index) => (
               <button 
                 key={actor.id} 
+                itemProp="actor" 
+                itemScope 
+                itemType="https://schema.org/Person"
                 className="group/avatar relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-full"
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={(e) => handleOpenActor(actor.id, e)}
                 aria-label={`Ver detalhes do ator ${actor.displayName}`}
               >
+                <meta itemProp="name" content={actor.displayName} />
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-pointer transition-transform duration-200 group-hover/avatar:scale-110">
                   {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
                     <Image 

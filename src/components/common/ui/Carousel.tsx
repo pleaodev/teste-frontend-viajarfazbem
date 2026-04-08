@@ -97,7 +97,22 @@ export function Carousel({ items }: CarouselProps) {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {items.map((item, index) => (
-          <article key={item.id} className="w-full flex-shrink-0 relative">
+          <article 
+            key={item.id} 
+            itemScope 
+            itemType="https://schema.org/Movie"
+            className="w-full flex-shrink-0 relative"
+          >
+            <meta itemProp="name" content={item.primaryTitle} />
+            {item.primaryImage?.url && <meta itemProp="image" content={item.primaryImage.url} />}
+            {item.plot && <meta itemProp="description" content={item.plot} />}
+            {item.startYear && <meta itemProp="datePublished" content={item.startYear.toString()} />}
+            {item.rating?.aggregateRating && (
+              <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating" className="hidden">
+                <meta itemProp="ratingValue" content={item.rating.aggregateRating.toString()} />
+                <meta itemProp="ratingCount" content={item.rating.voteCount?.toString() || "1"} />
+              </div>
+            )}
             {/* Background Image */}
             {item.primaryImage?.url && (
               <>

@@ -100,17 +100,20 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
             <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
           </div>
         ) : actorDetails ? (
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row" itemScope itemType="https://schema.org/Person">
             {/* Foto do Ator */}
             <div className="w-full md:w-[40%] relative aspect-[2/3] md:aspect-auto md:min-h-[500px] bg-muted shrink-0 rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none overflow-hidden">
               {actorDetails.primaryImage?.url ? (
-                <Image 
-                  src={actorDetails.primaryImage.url} 
-                  alt={actorDetails.displayName} 
-                  fill
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  className="object-cover"
-                />
+                <>
+                  <Image 
+                    src={actorDetails.primaryImage.url} 
+                    alt={actorDetails.displayName} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <meta itemProp="image" content={actorDetails.primaryImage.url} />
+                </>
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-muted-foreground bg-muted">
                   <Users className="h-16 w-16 opacity-50" />
@@ -122,16 +125,16 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
             {/* Informações */}
             <div className="w-full md:w-[60%] p-6 md:p-8 flex flex-col gap-6 relative">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-2">{actorDetails.displayName}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-2" itemProp="name">{actorDetails.displayName}</h2>
                 {actorDetails.birthName && actorDetails.birthName !== actorDetails.displayName && (
                   <p className="text-sm text-muted-foreground mb-4">
-                    Nascido(a) como {actorDetails.birthName}
+                    Nascido(a) como <span itemProp="alternateName">{actorDetails.birthName}</span>
                   </p>
                 )}
                 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                   {actorDetails.primaryProfessions && actorDetails.primaryProfessions.length > 0 && (
-                    <span className="flex items-center gap-1.5 bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full font-medium border border-blue-500/20">
+                    <span className="flex items-center gap-1.5 bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full font-medium border border-blue-500/20" itemProp="jobTitle">
                       {actorDetails.primaryProfessions.join(", ")}
                     </span>
                   )}
@@ -148,7 +151,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
               <div className="flex flex-col gap-3">
                 <div className="flex items-start gap-3 bg-muted/30 p-3 rounded-lg border border-border/50">
                   <MapPin className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
-                  <div>
+                  <div itemProp="birthPlace">
                     <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Local de Nascimento</span>
                     <span className="text-sm font-medium">{actorDetails.birthLocation || "Não encontrado"}</span>
                   </div>
@@ -159,15 +162,21 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
                     <Calendar className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
                     <div>
                       <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Nascimento</span>
-                      <span className="text-sm font-medium">{formatDate(actorDetails.birthDate)}</span>
+                      <span className="text-sm font-medium"><span itemProp="birthDate" content={actorDetails.birthDate || ""}>{formatDate(actorDetails.birthDate)}</span></span>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-3 bg-muted/30 p-3 rounded-lg border border-border/50">
                     <Ruler className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
-                    <div>
+                    <div itemProp="height" itemScope itemType="https://schema.org/QuantitativeValue">
                       <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Altura</span>
-                      <span className="text-sm font-medium">{actorDetails.heightCm ? `${actorDetails.heightCm} cm` : "Não encontrado"}</span>
+                      <span className="text-sm font-medium">
+                        {actorDetails.heightCm ? (
+                          <>
+                            <span itemProp="value">{actorDetails.heightCm}</span> <span itemProp="unitText">cm</span>
+                          </>
+                        ) : "Não encontrado"}
+                      </span>
                     </div>
                   </div>
 
@@ -176,7 +185,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
                       <Calendar className="h-5 w-5 text-red-500 mt-0.5 shrink-0" />
                       <div>
                         <span className="block text-xs text-red-500/70 font-medium uppercase tracking-wider mb-0.5">Falecimento</span>
-                        <span className="text-sm font-medium text-red-500">{formatDate(actorDetails.deathDate)}</span>
+                        <span className="text-sm font-medium text-red-500"><span itemProp="deathDate" content={actorDetails.deathDate || ""}>{formatDate(actorDetails.deathDate)}</span></span>
                       </div>
                     </div>
                   )}
@@ -191,6 +200,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
                     Biografia
                   </h3>
                   <div 
+                    itemProp="description"
                     className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap max-h-[300px] overflow-y-auto pr-2 custom-scrollbar"
                     data-lenis-prevent
                   >

@@ -14,8 +14,46 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ViajarFazBem",
-  description: "Filmes e Séries",
+  title: {
+    template: "%s | ViajarFazBem",
+    default: "ViajarFazBem - Filmes e Séries",
+  },
+  description: "Sua plataforma para viajar nos melhores filmes e séries. Descubra lançamentos, clássicos e muito mais.",
+  keywords: ["filmes", "séries", "cinema", "streaming", "viajarfazbem"],
+  authors: [{ name: "ViajarFazBem" }],
+  openGraph: {
+    title: "ViajarFazBem - Filmes e Séries",
+    description: "Sua plataforma para viajar nos melhores filmes e séries. Descubra lançamentos, clássicos e muito mais.",
+    url: "https://viajarfazbem.com",
+    siteName: "ViajarFazBem",
+    images: [
+      {
+        url: "/images/brands/logo-viajar-faz-bem-portal.svg",
+        width: 800,
+        height: 600,
+        alt: "ViajarFazBem Logo",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ViajarFazBem - Filmes e Séries",
+    description: "Sua plataforma para viajar nos melhores filmes e séries.",
+    images: ["/images/brands/logo-viajar-faz-bem-portal.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
