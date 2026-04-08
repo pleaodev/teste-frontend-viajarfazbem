@@ -9,7 +9,7 @@ export async function AllMoviesSection({
 }) {
   const params = await searchParams;
   const page = Number(params?.page) || 1;
-  const limit = 4;
+  const limit = Number(params?.limit) || 4;
   
   // Filtros
   const q = params?.q as string | undefined;
@@ -59,7 +59,7 @@ export async function AllMoviesSection({
     });
   }
 
-  // Paginação local garantida (4 itens por página)
+  // Paginação local garantida
   let totalPages = Math.ceil(filteredMovies.length / limit) || 1;
   const listMovies = filteredMovies.slice((page - 1) * limit, page * limit);
   
@@ -72,7 +72,10 @@ export async function AllMoviesSection({
   return (
     <section className="container mx-auto px-4 w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <h2 className="text-3xl font-bold tracking-tight">Todos os Filmes</h2>
+        <div className="flex flex-col gap-2">
+          <h2 className="text-3xl font-bold tracking-tight">Todos os Filmes</h2>
+          <p className="text-muted-foreground">Explore nossa coleção completa de títulos e encontre seus favoritos</p>
+        </div>
         <div className="flex items-center gap-4">
           <MovieFilterBar />
         </div>

@@ -33,6 +33,7 @@ export function MovieFilterBar() {
   const [isTyping, setIsTyping] = useState(false);
   
   // Estados dos filtros
+  const [limit, setLimit] = useState(searchParams.get("limit") || "12");
   const [type, setType] = useState(searchParams.get("type") || "movie");
   const [yearRange, setYearRange] = useState<number[]>([
     Number(searchParams.get("startYear")) || 1985, 
@@ -85,6 +86,9 @@ export function MovieFilterBar() {
     if (type) params.set("type", type);
     else params.delete("type");
 
+    if (limit && limit !== "4") params.set("limit", limit);
+    else params.delete("limit");
+
     params.set("startYear", yearRange[0].toString());
     params.set("endYear", yearRange[1].toString());
 
@@ -116,6 +120,7 @@ export function MovieFilterBar() {
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     const currentQ = params.get("q") || "";
+    const currentLimit = params.get("limit") || "4";
     const currentType = params.get("type") || "movie";
     const currentStart = Number(params.get("startYear")) || 1985;
     const currentEnd = Number(params.get("endYear")) || 2026;
@@ -133,6 +138,7 @@ export function MovieFilterBar() {
 
     const hasChanged = 
       searchQuery !== currentQ ||
+      limit !== currentLimit ||
       type !== currentType ||
       yearRange[0] !== currentStart ||
       yearRange[1] !== currentEnd ||
@@ -151,7 +157,7 @@ export function MovieFilterBar() {
     }, 1200);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, type, yearRange, genres, onlyAvailable]);
+  }, [searchQuery, limit, type, yearRange, genres, onlyAvailable]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,6 +165,7 @@ export function MovieFilterBar() {
   };
 
   const handleClear = () => {
+    setLimit("4");
     setType("movie");
     setYearRange([1985, 2026]);
     setGenres({ action: false, comedy: false, drama: false, scifi: false, horror: false });
@@ -201,6 +208,42 @@ export function MovieFilterBar() {
           }}
         />
       </form>
+
+      {/* Select limit */}
+      <FormControl size="small" className="min-w-[70px]">
+        <Select
+          value={limit}
+          onChange={(e) => setLimit(e.target.value)}
+          onOpen={() => setIsSelectOpen(true)}
+          onClose={() => setIsSelectOpen(false)}
+          displayEmpty
+          className="bg-card text-foreground rounded-md h-[40px]"
+          sx={{
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.2)",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.3)",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#0ea5e9", // text-sky-500
+            }
+          }}
+          MenuProps={{ 
+            disableScrollLock: true,
+            slotProps: {
+              paper: {
+                "data-lenis-prevent": true,
+              } as any,
+            },
+          }}
+        >
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="8">8</MenuItem>
+          <MenuItem value="12">12</MenuItem>
+          <MenuItem value="20">20</MenuItem>
+        </Select>
+      </FormControl>
 
       {/* Botão Circular do Filtro */}
       <IconButton 
