@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header, Footer, ScrollToTop } from "@/components/common";
+import { Header, Footer, ScrollToTop, LenisProvider } from "@/components/common";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import "./globals.css";
 
@@ -37,12 +37,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="flex-1 w-full flex flex-col">
-            {children}
-          </main>
-          <Footer />
-          <ScrollToTop />
+          <LenisProvider>
+            <Header />
+            <main className="flex-1 w-full flex flex-col">
+              {children}
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </LenisProvider>
         </ThemeProvider>
       </body>
     </html>

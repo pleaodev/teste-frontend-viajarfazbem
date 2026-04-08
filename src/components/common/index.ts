@@ -6,3 +6,4 @@ export * from './Carousel';
 export * from './FlyoutMenu';
 export * from './ScrollToTop';
 export * from './HeaderScrollWrapper';
+export * from './LenisProvider';
