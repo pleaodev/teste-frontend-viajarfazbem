@@ -12,6 +12,11 @@ interface TrailerDialogProps {
 
 export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
   const [isClosing, setIsClosing] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,7 +37,7 @@ export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
   };
 
   if (!isOpen && !isClosing) return null;
-  if (typeof window === 'undefined') return null;
+  if (!mounted) return null;
 
   return createPortal(
     <div 

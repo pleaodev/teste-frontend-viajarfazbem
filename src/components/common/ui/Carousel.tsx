@@ -153,7 +153,7 @@ export function Carousel({ items }: CarouselProps) {
                     <span className="text-lg">{item.rating?.aggregateRating?.toFixed(1) || "N/A"}</span>
                     {item.rating?.voteCount && (
                       <span className="text-sm text-muted-foreground font-normal ml-2">
-                        ({item.rating.voteCount.toLocaleString()} avaliações)
+                        ({item.rating.voteCount.toLocaleString('pt-BR')} avaliações)
                       </span>
                     )}
                   </div>

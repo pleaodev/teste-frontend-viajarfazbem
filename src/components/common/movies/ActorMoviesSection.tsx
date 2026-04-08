@@ -150,7 +150,7 @@ export function ActorMoviesSection() {
     if (!selectedLetter) return actors; // Mantém ordem original (mais famosos)
     return actors
       .filter(a => a.displayName.toUpperCase().startsWith(selectedLetter))
-      .sort((a, b) => a.displayName.localeCompare(b.displayName));
+      .sort((a, b) => a.displayName.localeCompare(b.displayName, 'pt-BR'));
   }, [actors, selectedLetter]);
 
   const scroll = (direction: "left" | "right") => {
