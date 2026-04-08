@@ -218,10 +218,10 @@ export function ActorMoviesSection() {
           {filteredActors.map(actor => (
             <div 
               key={actor.id} 
-              className={`flex flex-col items-center gap-3 cursor-pointer shrink-0 snap-start transition-all duration-300 hover:scale-105 ${selectedActor?.id === actor.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+              className={`flex flex-col items-center gap-3 cursor-pointer shrink-0 snap-start transition-all duration-300 hover:scale-105 ${selectedActor?.id === actor.id ? 'opacity-100' : 'opacity-100 dark:opacity-60 dark:hover:opacity-100'}`}
               onClick={() => handleActorClick(actor)}
             >
-              <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedActor?.id === actor.id ? 'border-primary shadow-lg shadow-primary/20' : 'border-transparent'}`}>
+              <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedActor?.id === actor.id ? 'border-sky-700 dark:border-transparent shadow-lg shadow-sky-700/20 dark:shadow-none' : 'border-transparent'}`}>
                 {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
                   <Image 
                     src={actor.primaryImage.url} 
@@ -243,7 +243,7 @@ export function ActorMoviesSection() {
                   />
                 )}
               </div>
-              <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedActor?.id === actor.id ? 'text-primary' : 'text-foreground'}`}>
+              <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedActor?.id === actor.id ? 'text-sky-700 dark:text-primary' : 'text-foreground'}`}>
                 {actor.displayName}
               </span>
             </div>

@@ -139,7 +139,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(1)}
           onClick={(e: any) => handleNavigate(e, 1, 'first')}
           disabled={currentPage <= 1}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Primeira Página"
           title="Primeiro"
         >
@@ -156,7 +156,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(currentPage - 1)}
           onClick={(e: any) => handleNavigate(e, currentPage - 1, 'prev')}
           disabled={currentPage <= 1}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Página Anterior"
           title="Anterior"
         >
@@ -178,9 +178,9 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
               href={createPageUrl(page)}
               onClick={(e: any) => handleNavigate(e, page, page)}
               ariaCurrent={isCurrent ? "page" : undefined}
-              className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors ring-1 ring-inset h-[40px] !w-[40px] !p-0 shadow-sm ${
+              className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors ring-1 ring-inset h-[40px] !w-[40px] !p-0 dark:shadow-sm overflow-hidden ${
                 isCurrent
-                  ? "z-10 bg-gray-800/60 text-sky-600 ring-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
+                  ? "z-10 bg-gray-100 text-sky-500 ring-gray-300 hover:bg-sky-700 dark:bg-sky-500/20 dark:text-sky-400 dark:ring-sky-500/50 dark:hover:bg-sky-500/30"
                   : "text-foreground ring-border hover:bg-muted"
               }`}
             >
@@ -198,7 +198,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(currentPage + 1)}
           onClick={(e: any) => handleNavigate(e, currentPage + 1, 'next')}
           disabled={currentPage >= totalPages}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Próxima Página"
           title="Próximo"
         >
@@ -215,7 +215,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(totalPages)}
           onClick={(e: any) => handleNavigate(e, totalPages, 'last')}
           disabled={currentPage >= totalPages}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Última Página"
           title="Última"
         >

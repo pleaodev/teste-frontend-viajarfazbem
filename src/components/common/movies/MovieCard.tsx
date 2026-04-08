@@ -176,7 +176,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         )}
 
         {/* Gradiente inferior para melhor legibilidade */}
-        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[0%] dark:h-[60%] bg-gradient-to-t from-white via-white/0 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/80 pointer-events-none" />
       </div>
 
       {/* Conteúdo do Card */}
@@ -200,7 +200,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         <div className="mt-auto flex items-center gap-2">
           <button 
             onClick={handleOpenDetails}
-            className="flex-1 flex items-center justify-center gap-2 rounded-md bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white border border-sky-500/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
+            className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white border border-sky-500/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
             aria-label={`Ver mais detalhes do filme ${movie.primaryTitle}`}
           >
             <Info className="h-4 w-4" aria-hidden="true" />

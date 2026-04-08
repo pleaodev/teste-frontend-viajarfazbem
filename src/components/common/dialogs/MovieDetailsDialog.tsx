@@ -48,20 +48,20 @@ export function MovieDetailsDialog({
 
   return (
     <div 
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-white/80 dark:bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-label={`Detalhes de ${movie.primaryTitle}`}
     >
-      <div className={`relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl border border-border shadow-2xl ${isClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()} data-lenis-prevent>
+      <div className={`relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-background rounded-2xl border border-border shadow-2xl ${isClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()} data-lenis-prevent>
         {/* Botão Fechar */}
         <button 
           onClick={(e) => {
             e.stopPropagation();
             handleClose();
           }}
-          className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-white/20 transition-colors border border-white/20 cursor-pointer"
+          className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-black/50 text-foreground dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition-colors border border-black/10 dark:border-white/20 cursor-pointer"
           aria-label="Fechar detalhes"
         >
           <X className="h-5 w-5" aria-hidden="true" />
@@ -89,7 +89,7 @@ export function MovieDetailsDialog({
                 </div>
               )}
               {/* Degradê para transição suave na versão mobile */}
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent md:hidden" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent md:hidden" />
             </div>
 
             {/* Informações */}

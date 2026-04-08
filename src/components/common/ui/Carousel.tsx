@@ -109,8 +109,8 @@ export function Carousel({ items }: CarouselProps) {
                   className="object-cover"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent dark:via-background/60" />
+                <div className="absolute inset-0 w-full md:w-3/4 lg:w-2/3 bg-gradient-to-r from-background/95 via-background/70 to-transparent dark:from-background/90 dark:via-background/40" />
               </>
             )}
 
@@ -150,7 +150,7 @@ export function Carousel({ items }: CarouselProps) {
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     <button 
                       onClick={() => handleOpenDetails(item)}
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-500/20 hover:bg-sky-500 text-sky-500 hover:text-white font-semibold rounded-md backdrop-blur-sm border border-sky-500/30 transition-all cursor-pointer"
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
                       aria-label={`Ver mais detalhes sobre ${item.primaryTitle}`}
                     >
                       <Info className="w-5 h-5" aria-hidden="true" />
@@ -195,7 +195,7 @@ export function Carousel({ items }: CarouselProps) {
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`w-2.5 h-2.5 rounded-full transition-all ${
-              idx === currentIndex ? "bg-white w-8" : "bg-muted-foreground/50 hover:bg-muted-foreground"
+              idx === currentIndex ? "bg-sky-700 dark:bg-white w-8" : "bg-muted-foreground/50 hover:bg-muted-foreground"
             }`}
             aria-label={`Ir para slide ${idx + 1}`}
           />

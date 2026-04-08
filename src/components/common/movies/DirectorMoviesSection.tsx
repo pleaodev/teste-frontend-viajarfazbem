@@ -232,10 +232,10 @@ export function DirectorMoviesSection() {
           {filteredDirectors.map(director => (
             <div 
               key={director.id} 
-              className={`flex flex-col items-center gap-3 cursor-pointer shrink-0 snap-start transition-all duration-300 hover:scale-105 ${selectedDirector?.id === director.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+              className={`flex flex-col items-center gap-3 cursor-pointer shrink-0 snap-start transition-all duration-300 hover:scale-105 ${selectedDirector?.id === director.id ? 'opacity-100' : 'opacity-100 dark:opacity-60 dark:hover:opacity-100'}`}
               onClick={() => handleDirectorClick(director)}
             >
-              <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedDirector?.id === director.id ? 'border-primary shadow-lg shadow-primary/20' : 'border-transparent'}`}>
+              <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 transition-colors duration-300 ${selectedDirector?.id === director.id ? 'border-sky-700 dark:border-transparent shadow-lg shadow-sky-700/20 dark:shadow-none' : 'border-transparent'}`}>
                 {(!directorImgErrors[director.id] && director.primaryImage?.url) ? (
                   <Image 
                     src={director.primaryImage.url} 
@@ -257,7 +257,7 @@ export function DirectorMoviesSection() {
                   />
                 )}
               </div>
-              <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedDirector?.id === director.id ? 'text-primary' : 'text-foreground'}`}>
+              <span className={`text-sm font-medium text-center max-w-[100px] md:max-w-[120px] truncate transition-colors duration-300 ${selectedDirector?.id === director.id ? 'text-sky-700 dark:text-primary' : 'text-foreground'}`}>
                 {director.displayName}
               </span>
             </div>

@@ -34,13 +34,13 @@ export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
 
   return (
     <div 
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-white/90 dark:bg-black/90 p-4 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-label={`Trailer de ${title}`}
     >
-      <div className={`relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl ${isClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
+      <div className={`relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl ${isClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
         <button 
           onClick={(e) => {
             e.stopPropagation();
