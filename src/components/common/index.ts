@@ -15,6 +15,7 @@ export * from './dialogs/ActorDialog';
 export * from './dialogs/TrailerDialog';
 export * from './dialogs/MovieDetailsDialog';
 export * from './movies/MovieCard';
+export * from './movies/MovieCardSkeleton';
 export * from './movies/ActorMoviesSection';
 export * from './movies/AllMoviesSection';
 export * from './movies/DirectorMoviesSection';

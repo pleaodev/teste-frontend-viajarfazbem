@@ -214,13 +214,8 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
 
   return (
     <div className="flex items-center gap-3 w-full md:w-auto">
-      {/* Spinner */}
-      {(isPending || isTyping) && (
-        <CircularProgress size={20} className="text-sky-500 shrink-0" />
-      )}
-
       {/* Input de Busca */}
-      <form onSubmit={handleSearch} className="flex items-center flex-1 md:flex-none">
+      <form onSubmit={handleSearch} className="flex items-center flex-1 md:flex-none min-w-0">
         <TextField
           size="small"
           fullWidth
@@ -230,8 +225,8 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           onChange={(e) => setSearchQuery(e.target.value)}
           slotProps={{
             input: {
-              startAdornment: <Search className="text-muted-foreground mr-2" fontSize="small" />,
-              className: "bg-card text-foreground rounded-md w-full sm:w-64 md:w-80 h-[42px]",
+              startAdornment: <Search className="text-muted-foreground mr-2 shrink-0" fontSize="small" />,
+              className: "bg-card text-foreground rounded-md w-full sm:w-64 md:w-56 lg:w-80 h-[42px]",
             }
           }}
           sx={{
@@ -248,7 +243,7 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
       </form>
 
       {/* Select limit */}
-      <FormControl size="small" className="inline-flex min-w-[70px]">
+      <FormControl size="small" className="inline-flex min-w-[70px] shrink-0">
         <Select
           value={limit}
           onChange={(e) => setLimit(e.target.value)}
@@ -289,6 +284,7 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
       {/* Botão Circular do Filtro */}
       <IconButton 
         onClick={() => setIsDrawerOpen(true)}
+        className="shrink-0"
         sx={{ 
           width: '42px',
           height: '42px',

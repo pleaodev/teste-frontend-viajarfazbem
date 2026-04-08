@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { getStarMeter, getPersonFilmography, Title, StarMeterEntry } from "@/services/imdb";
 import { MovieCard } from "./MovieCard";
+import { MovieCardSkeleton } from "./MovieCardSkeleton";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
 import { useLenis } from "lenis/react";
@@ -287,8 +288,10 @@ export function ActorMoviesSection() {
       {selectedActor && (
         <div className="mt-4 pt-4 animate-in fade-in duration-500 slide-in-from-bottom-4">
           {isLoadingMovies ? (
-            <div className="w-full flex justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {Array.from({ length: moviesPerPage }).map((_, i) => (
+                <MovieCardSkeleton key={i} />
+              ))}
             </div>
           ) : actorMovies.length > 0 ? (
             <>
