@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star, Info, Film } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Info, Film, Heart } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
@@ -20,6 +20,15 @@ export function Carousel({ items }: CarouselProps) {
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  const toggleFavorite = (movieId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites(prev => ({
+      ...prev,
+      [movieId]: !prev[movieId]
+    }));
+  };
   
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
@@ -178,6 +187,14 @@ export function Carousel({ items }: CarouselProps) {
                     >
                       <Film className="w-5 h-5" aria-hidden="true" />
                       Trailer
+                    </button>
+                    <button
+                      onClick={(e) => toggleFavorite(item.id, e)}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${favorites[item.id] ? 'bg-black/40 hover:bg-black/60' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
+                      aria-label={favorites[item.id] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                      aria-pressed={favorites[item.id] || false}
+                    >
+                      <Heart className={`h-5 w-5 transition-colors duration-300 ${favorites[item.id] ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
                     </button>
                   </div>
                 </div>

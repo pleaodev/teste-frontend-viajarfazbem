@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, Film, Info } from "lucide-react";
+import { Star, Film, Info, Heart } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { ActorDialog } from "../dialogs/ActorDialog";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
@@ -23,6 +23,13 @@ export function MovieCard({ movie }: MovieCardProps) {
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
   const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFavorite((prev) => !prev);
+  };
 
   const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
     if (e) {
@@ -113,10 +120,10 @@ export function MovieCard({ movie }: MovieCardProps) {
   return (
     <>
       <article 
-        itemScope 
-        itemType="https://schema.org/Movie"
-        className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-background"
-      >
+      itemScope 
+      itemType="https://schema.org/Movie"
+      className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg outline-none"
+    >
         <meta itemProp="name" content={movie.primaryTitle} />
         <meta itemProp="image" content={image} />
         {movie.plot && <meta itemProp="description" content={movie.plot} />}
@@ -156,6 +163,16 @@ export function MovieCard({ movie }: MovieCardProps) {
           <Star className="h-3.5 w-3.5 fill-current" />
           <span>{rating}</span>
         </div>
+
+        {/* Botão Favoritar (Coração) */}
+        <button
+          onClick={handleToggleFavorite}
+          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${isFavorite ? 'bg-black/40 hover:bg-black/60' : 'bg-black/20 hover:bg-black/50 text-white/90 hover:text-white'}`}
+          aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          aria-pressed={isFavorite}
+        >
+          <Heart className={`h-4 w-4 transition-colors duration-300 ${isFavorite ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
+        </button>
 
         {/* Avatares Flutuantes dos Atores */}
         {topActors.length > 0 && (
