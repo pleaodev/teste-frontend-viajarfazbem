@@ -115,7 +115,7 @@ export function MovieCard({ movie }: MovieCardProps) {
       <article 
         itemScope 
         itemType="https://schema.org/Movie"
-        className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg"
+        className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-background"
       >
         <meta itemProp="name" content={movie.primaryTitle} />
         <meta itemProp="image" content={image} />
@@ -129,13 +129,25 @@ export function MovieCard({ movie }: MovieCardProps) {
         )}
         
       {/* Imagem do Filme */}
-      <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0">
+      <div 
+        className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0 cursor-pointer group/image"
+        onClick={handleOpenDetails}
+        role="button"
+        tabIndex={0}
+        aria-label={`Ver mais detalhes do filme ${movie.primaryTitle}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleOpenDetails();
+          }
+        }}
+      >
         <Image
           src={image}
           alt={movie.primaryTitle}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover:scale-105 will-change-transform [backface-visibility:hidden]"
+          className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover/image:scale-105 will-change-transform [backface-visibility:hidden]"
           onError={() => setImgError(true)}
         />
         
@@ -147,7 +159,7 @@ export function MovieCard({ movie }: MovieCardProps) {
 
         {/* Avatares Flutuantes dos Atores */}
         {topActors.length > 0 && (
-          <div className="absolute left-3 bottom-3 flex flex-col gap-2 rounded-full z-10">
+          <div className="absolute left-3 bottom-3 flex flex-col gap-2 rounded-full z-10" onClick={(e) => e.stopPropagation()}>
             {topActors.map((actor, index) => (
               <button 
                 key={actor.id} 
@@ -199,7 +211,10 @@ export function MovieCard({ movie }: MovieCardProps) {
       </div>
 
       {/* Conteúdo do Card */}
-      <div className="flex flex-1 flex-col p-5">
+      <div 
+        className="flex flex-1 flex-col p-5 cursor-pointer"
+        onClick={handleOpenDetails}
+      >
         <div className="mb-2 flex items-start justify-between gap-2">
           <h3 className="font-bold text-lg leading-tight line-clamp-1 group-hover:text-sky-500 transition-colors" title={movie.primaryTitle}>
             {movie.primaryTitle}
@@ -216,7 +231,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         </p>
 
         {/* Botões */}
-        <div className="mt-auto flex items-center gap-2">
+        <div className="mt-auto flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
           <button 
             onClick={handleOpenDetails}
             className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white border border-sky-500/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"

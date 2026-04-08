@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, MapPin, Calendar, Ruler, Users, Loader2, Info } from "lucide-react";
+import { X, MapPin, Calendar, Ruler, Users, Info, Award } from "lucide-react";
 import { PersonDetails, getPersonDetails } from "@/services/imdb";
+import { CircularProgress } from "@mui/material";
 
 interface ActorDialogProps {
   actorId: string | null;
@@ -106,7 +107,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
 
         {isLoading ? (
           <div className="flex items-center justify-center h-[50vh]">
-            <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+            <CircularProgress size={48} color="inherit" className="text-muted-foreground" />
           </div>
         ) : actorDetails ? (
           <div className="flex flex-col md:flex-row" itemScope itemType="https://schema.org/Person">

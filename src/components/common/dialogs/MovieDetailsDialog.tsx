@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, Loader2, Star, Calendar, Clock, Info, Users, Clapperboard } from "lucide-react";
+import { X, Star, Calendar, Clock, Info, Users, Clapperboard } from "lucide-react";
 import { Title, TitleDetails } from "@/services/imdb";
+import { CircularProgress } from "@mui/material";
 
 interface MovieDetailsDialogProps {
   isOpen: boolean;
@@ -77,7 +78,7 @@ export function MovieDetailsDialog({
 
         {isLoading ? (
           <div className="flex items-center justify-center h-[50vh]">
-            <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+            <CircularProgress size={48} color="inherit" className="text-muted-foreground" />
           </div>
         ) : (
           <div className="flex flex-col md:flex-row">
