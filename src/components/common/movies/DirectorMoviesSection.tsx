@@ -6,7 +6,7 @@ import { batchGetTitles, Title, StarMeterEntry } from "@/services/imdb";
 import { MovieCard } from "./MovieCard";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
-
+import { useLenis } from "lenis/react";
 import { Pagination } from "../ui/Pagination";
 
 const DIRECTORS_LIST: StarMeterEntry[] = [
@@ -38,6 +38,7 @@ const DIRECTOR_MOVIES_MAP: Record<string, string[]> = {
 };
 
 export function DirectorMoviesSection() {
+  const lenis = useLenis();
   const [directors, setDirectors] = useState<StarMeterEntry[]>([]);
   const [selectedDirector, setSelectedDirector] = useState<StarMeterEntry | null>(null);
   const [directorMovies, setDirectorMovies] = useState<Title[]>([]);
@@ -50,8 +51,25 @@ export function DirectorMoviesSection() {
   const [directorImgErrors, setDirectorImgErrors] = useState<Record<string, boolean>>({});
   const moviesPerPage = 4;
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  // Lock scroll when the menu is open
+  useEffect(() => {
+    if (!isSelectOpen) return;
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.MuiPaper-root')) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    window.addEventListener('wheel', preventScroll, { passive: false, capture: true });
+    window.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener('wheel', preventScroll, { capture: true });
+      window.removeEventListener('touchmove', preventScroll, { capture: true });
+    };
+  }, [isSelectOpen]);
 
   useEffect(() => {
     // Simulando carregamento para manter padrão de interface
@@ -140,15 +158,19 @@ export function DirectorMoviesSection() {
             <Select
               value={selectedLetter}
               onChange={(e) => setSelectedLetter(e.target.value)}
+              onOpen={() => setIsSelectOpen(true)}
+              onClose={() => setIsSelectOpen(false)}
               displayEmpty
               className="text-foreground border-border"
               MenuProps={{ 
+                disableScrollLock: true,
                 slotProps: {
                   paper: {
                     style: {
                       maxHeight: 250,
                     },
-                  },
+                    "data-lenis-prevent": true,
+                  } as any,
                 },
               }}
             >

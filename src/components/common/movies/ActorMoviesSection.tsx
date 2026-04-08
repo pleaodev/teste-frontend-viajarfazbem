@@ -6,10 +6,11 @@ import { getStarMeter, getPersonFilmography, Title, StarMeterEntry } from "@/ser
 import { MovieCard } from "./MovieCard";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
-
+import { useLenis } from "lenis/react";
 import { Pagination } from "../ui/Pagination";
 
 export function ActorMoviesSection() {
+  const lenis = useLenis();
   const [actors, setActors] = useState<StarMeterEntry[]>([]);
   const [selectedActor, setSelectedActor] = useState<StarMeterEntry | null>(null);
   const [actorMovies, setActorMovies] = useState<Title[]>([]);
@@ -22,8 +23,25 @@ export function ActorMoviesSection() {
   const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
   const moviesPerPage = 4;
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  // Trava o scroll quando o menu está aberto
+  useEffect(() => {
+    if (!isSelectOpen) return;
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.MuiPaper-root')) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    window.addEventListener('wheel', preventScroll, { passive: false, capture: true });
+    window.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener('wheel', preventScroll, { capture: true });
+      window.removeEventListener('touchmove', preventScroll, { capture: true });
+    };
+  }, [isSelectOpen]);
 
   useEffect(() => {
     const fetchActors = async () => {
@@ -122,15 +140,19 @@ export function ActorMoviesSection() {
             <Select
               value={selectedLetter}
               onChange={(e) => setSelectedLetter(e.target.value)}
+              onOpen={() => setIsSelectOpen(true)}
+              onClose={() => setIsSelectOpen(false)}
               displayEmpty
               className="text-foreground border-border"
               MenuProps={{ 
+                disableScrollLock: true,
                 slotProps: {
                   paper: {
                     style: {
                       maxHeight: 250,
                     },
-                  },
+                    "data-lenis-prevent": true,
+                  } as any,
                 },
               }}
             >
@@ -209,7 +231,7 @@ export function ActorMoviesSection() {
         </button>
       </div>
 
-      {/* Actor Movies List */}
+      {/* Lista de Filmes do Ator */}
       {selectedActor && (
         <div className="mt-4 pt-4 animate-in fade-in duration-500 slide-in-from-bottom-4">
           {isLoadingMovies ? (

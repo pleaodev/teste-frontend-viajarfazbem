@@ -20,13 +20,14 @@ import {
   CircularProgress
 } from "@mui/material";
 import { Search, FilterList, Close } from "@mui/icons-material";
+import { useLenis } from "lenis/react";
 
 export function MovieFilterBar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-
+  const lenis = useLenis();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [isTyping, setIsTyping] = useState(false);
@@ -49,6 +50,24 @@ export function MovieFilterBar() {
   });
   
   const [onlyAvailable, setOnlyAvailable] = useState(searchParams.get("available") === "true");
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+  // Lock scroll when the menu is open
+  useEffect(() => {
+    if (!isSelectOpen) return;
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.MuiPaper-root')) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    window.addEventListener('wheel', preventScroll, { passive: false, capture: true });
+    window.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener('wheel', preventScroll, { capture: true });
+      window.removeEventListener('touchmove', preventScroll, { capture: true });
+    };
+  }, [isSelectOpen]);
 
   const handleGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGenres({
@@ -220,7 +239,16 @@ export function MovieFilterBar() {
                 value={type}
                 label="Tipo de Título"
                 onChange={(e) => setType(e.target.value)}
-                MenuProps={{ disableScrollLock: true }}
+                onOpen={() => setIsSelectOpen(true)}
+                onClose={() => setIsSelectOpen(false)}
+                MenuProps={{ 
+                  disableScrollLock: true,
+                  slotProps: {
+                    paper: {
+                      "data-lenis-prevent": true,
+                    } as any,
+                  },
+                }}
               >
                 <MenuItem value="movie">Filmes</MenuItem>
                 <MenuItem value="tvSeries">Séries</MenuItem>
