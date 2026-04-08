@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header, Footer, ScrollToTop, LenisProvider, ThemeProvider } from "@/components/common";
+import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -75,7 +76,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LenisProvider>
-            <Header />
+            <Suspense>
+              <Header />
+            </Suspense>
             <main className="flex-1 w-full flex flex-col">
               {children}
             </main>

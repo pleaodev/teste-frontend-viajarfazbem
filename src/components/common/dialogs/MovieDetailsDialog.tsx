@@ -27,6 +27,12 @@ export function MovieDetailsDialog({
 }: MovieDetailsDialogProps) {
   const [isClosing, setIsClosing] = useState(false);
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -46,7 +52,7 @@ export function MovieDetailsDialog({
   };
 
   if (!isOpen && !isClosing) return null;
-  if (typeof window === 'undefined') return null;
+  if (!mounted) return null;
 
   return createPortal(
     <div 

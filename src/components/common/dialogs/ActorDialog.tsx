@@ -17,6 +17,12 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (isOpen && actorId) {
       setIsLoading(true);
@@ -66,14 +72,14 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
     if (!dateStr) return "Não encontrado";
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return "Não encontrado";
-    return d.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
+    // Avoid hydration mismatch by using a fixed format string or checking if mounted
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const month = d.toLocaleString('pt-BR', { month: 'long', timeZone: 'UTC' });
+    const year = d.getUTCFullYear();
+    return `${day} de ${month} de ${year}`;
   };
 
-  if (typeof window === 'undefined') return null;
+  if (!mounted) return null;
 
   return createPortal(
     <div 

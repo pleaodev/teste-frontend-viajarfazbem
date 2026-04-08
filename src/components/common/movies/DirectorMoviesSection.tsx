@@ -22,7 +22,7 @@ const DIRECTORS_LIST: StarMeterEntry[] = [
   { id: "nm0868219", displayName: "Guillermo del Toro", primaryImage: { url: "https://m.media-amazon.com/images/M/MV5BOTUzNTYwNjE0N15BMl5BanBnXkFtZTcwMjc0ODM1Mw@@._V1_.jpg" } },
   { id: "nm0000318", displayName: "Tim Burton", primaryImage: { url: "https://m.media-amazon.com/images/M/MV5BZmFhZTljMTgtMTVmMS00NWFhLWE2ZDEtYjM5YWYwZmI0NWI1XkEyXkFqcGc@._V1_.jpg" } },
   { id: "nm0594503", displayName: "Hayao Miyazaki", primaryImage: { url: "https://m.media-amazon.com/images/M/MV5BMjcyNjk2OTkwNF5BMl5BanBnXkFtZTcwOTk0MTQ3Mg@@._V1_.jpg" } }
-].sort((a, b) => a.displayName.localeCompare(b.displayName));
+].sort((a, b) => a.displayName.localeCompare(b.displayName, 'pt-BR'));
 
 const DIRECTOR_MOVIES_MAP: Record<string, string[]> = {
   "nm0634240": ["tt1375666", "tt0468569", "tt0816692", "tt15398776", "tt6723592"], // Christopher Nolan
@@ -162,7 +162,7 @@ export function DirectorMoviesSection() {
     if (!selectedLetter) return directors; // Mantém ordem original
     return directors
       .filter(d => d.displayName.toUpperCase().startsWith(selectedLetter))
-      .sort((a, b) => a.displayName.localeCompare(b.displayName));
+      .sort((a, b) => a.displayName.localeCompare(b.displayName, 'pt-BR'));
   }, [directors, selectedLetter]);
 
   const scroll = (direction: "left" | "right") => {
