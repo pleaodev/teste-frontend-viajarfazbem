@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, MapPin, Calendar, Ruler, Users, Loader2, Info } from "lucide-react";
 import { PersonDetails, getPersonDetails } from "@/services/imdb";
@@ -72,7 +73,9 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
     });
   };
 
-  return (
+  if (typeof window === 'undefined') return null;
+
+  return createPortal(
     <div 
       className={`fixed inset-0 z-[110] flex items-center justify-center bg-white/80 dark:bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
@@ -218,6 +221,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

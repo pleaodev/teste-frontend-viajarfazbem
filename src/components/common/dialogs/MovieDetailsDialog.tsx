@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, Loader2, Star, Calendar, Clock, Info, Users, Clapperboard } from "lucide-react";
 import { Title, TitleDetails } from "@/services/imdb";
@@ -45,8 +46,9 @@ export function MovieDetailsDialog({
   };
 
   if (!isOpen && !isClosing) return null;
+  if (typeof window === 'undefined') return null;
 
-  return (
+  return createPortal(
     <div 
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-white/80 dark:bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
@@ -187,6 +189,7 @@ export function MovieDetailsDialog({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

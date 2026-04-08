@@ -1,10 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Title } from "@/services/imdb";
+import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { MenuDrawer } from "../ui/MenuDrawer";
 import { IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
+import { ActorDialog } from "../dialogs/ActorDialog";
 
 interface MovieListDrawerProps {
   isOpen: boolean;
@@ -14,8 +17,65 @@ interface MovieListDrawerProps {
 }
 
 export function MovieListDrawer({ isOpen, onClose, title, items }: MovieListDrawerProps) {
+  const [selectedMovie, setSelectedMovie] = useState<Title | null>(null);
+  const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
+  const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
+
+  const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setSelectedActorId(actorId);
+    setIsActorDialogOpen(true);
+  };
+
+  const handleCloseActor = () => {
+    setIsActorDialogOpen(false);
+    setTimeout(() => setSelectedActorId(null), 300);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isActorDialogOpen) handleCloseActor();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActorDialogOpen]);
+
+  const handleMovieClick = async (movie: Title) => {
+    setSelectedMovie(movie);
+    setIsDetailsOpen(true);
+    setMovieDetails(null);
+    setIsLoadingDetails(true);
+
+    try {
+      const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
+      setMovieDetails(details);
+    } catch (error: unknown) {
+      console.warn("Erro ao buscar detalhes do filme no Drawer:", error instanceof Error ? error.message : error);
+    } finally {
+      setIsLoadingDetails(false);
+    }
+  };
+
+  const closeDetails = () => {
+    setIsDetailsOpen(false);
+    setTimeout(() => {
+      setSelectedMovie(null);
+      setMovieDetails(null);
+    }, 300);
+  };
+
   return (
-    <MenuDrawer 
+    <>
+      <MenuDrawer 
       isOpen={isOpen} 
       onClose={onClose} 
       position="right"
@@ -38,7 +98,11 @@ export function MovieListDrawer({ isOpen, onClose, title, items }: MovieListDraw
           <p className="text-sm text-muted-foreground py-4 text-center">Nenhum título encontrado</p>
         ) : (
           items.map((item) => (
-            <div key={item.id} className="flex items-center gap-3 rounded-md p-2 hover:bg-muted transition-colors cursor-pointer">
+            <div 
+              key={item.id} 
+              onClick={() => handleMovieClick(item)}
+              className="flex items-center gap-3 rounded-md p-2 hover:bg-muted transition-colors cursor-pointer"
+            >
               <div className="relative h-16 w-12 flex-shrink-0 overflow-hidden rounded bg-muted">
                 {item.primaryImage?.url ? (
                   <Image
@@ -72,5 +136,26 @@ export function MovieListDrawer({ isOpen, onClose, title, items }: MovieListDraw
         )}
       </div>
     </MenuDrawer>
+
+    {selectedMovie && (
+      <MovieDetailsDialog
+        isOpen={isDetailsOpen}
+        onClose={closeDetails}
+        movie={selectedMovie}
+        movieDetails={movieDetails}
+        isLoading={isLoadingDetails}
+        rating={selectedMovie.rating?.aggregateRating?.toFixed(1) || "N/A"}
+        onOpenActor={handleOpenActor}
+      />
+    )}
+
+    {selectedActorId && (
+      <ActorDialog
+        isOpen={isActorDialogOpen}
+        onClose={handleCloseActor}
+        actorId={selectedActorId}
+      />
+    )}
+    </>
   );
 }

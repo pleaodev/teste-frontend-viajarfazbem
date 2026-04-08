@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 interface TrailerDialogProps {
@@ -31,8 +32,9 @@ export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
   };
 
   if (!isOpen && !isClosing) return null;
+  if (typeof window === 'undefined') return null;
 
-  return (
+  return createPortal(
     <div 
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-white/90 dark:bg-black/90 p-4 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
@@ -59,6 +61,7 @@ export function TrailerDialog({ isOpen, onClose, title }: TrailerDialogProps) {
           allowFullScreen
         ></iframe>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
