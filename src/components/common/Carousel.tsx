@@ -30,6 +30,16 @@ export function Carousel({ items }: CarouselProps) {
     }, 300);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedTrailerTitle) {
+        closeTrailer();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedTrailerTitle]);
+
   // Autoplay functionality
   useEffect(() => {
     if (items.length === 0) return;
@@ -51,7 +61,7 @@ export function Carousel({ items }: CarouselProps) {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {items.map((item, index) => (
-          <div key={item.id} className="w-full flex-shrink-0 relative">
+          <article key={item.id} className="w-full flex-shrink-0 relative">
             {/* Background Image */}
             {item.primaryImage?.url && (
               <>
@@ -59,6 +69,7 @@ export function Carousel({ items }: CarouselProps) {
                   src={item.primaryImage.url}
                   alt={item.primaryTitle}
                   fill
+                  sizes="100vw"
                   className="object-cover"
                   priority={index === 0}
                 />
@@ -101,22 +112,26 @@ export function Carousel({ items }: CarouselProps) {
                   </p>
                   
                   <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <button className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer">
-                      <Info className="w-5 h-5" />
+                    <button 
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-500/20 hover:bg-sky-500 text-sky-500 hover:text-white font-semibold rounded-md backdrop-blur-sm border border-sky-500/30 transition-all cursor-pointer"
+                      aria-label={`Ver mais detalhes sobre ${item.primaryTitle}`}
+                    >
+                      <Info className="w-5 h-5" aria-hidden="true" />
                       Ver Mais
                     </button>
                     <button 
                       onClick={() => setSelectedTrailerTitle(item.primaryTitle)}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
+                      aria-label={`Assistir trailer de ${item.primaryTitle}`}
                     >
-                      <Film className="w-5 h-5" />
+                      <Film className="w-5 h-5" aria-hidden="true" />
                       Trailer
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
 
@@ -152,7 +167,13 @@ export function Carousel({ items }: CarouselProps) {
 
       {/* Dialog do Trailer */}
       {selectedTrailerTitle && (
-        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isTrailerClosing ? 'animate-fade-out' : 'animate-fade-in'}`} onClick={closeTrailer}>
+        <div 
+          className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isTrailerClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+          onClick={closeTrailer}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Trailer de ${selectedTrailerTitle}`}
+        >
           <div className={`relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl ${isTrailerClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
             <button 
               onClick={(e) => {

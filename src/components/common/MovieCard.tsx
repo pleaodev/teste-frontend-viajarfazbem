@@ -68,6 +68,18 @@ export function MovieCard({ movie }: MovieCardProps) {
   };
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isActorDialogOpen) handleCloseActor();
+        else if (isTrailerOpen) closeTrailer();
+        else if (isDetailsOpen) closeDetails();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActorDialogOpen, isTrailerOpen, isDetailsOpen]);
+
+  useEffect(() => {
     let isMounted = true;
 
     const fetchActorsSilently = async () => {
@@ -107,7 +119,7 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   return (
     <>
-      <div className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg">
+      <article className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg">
       {/* Imagem do Filme */}
       <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0">
         <Image
@@ -129,11 +141,12 @@ export function MovieCard({ movie }: MovieCardProps) {
         {topActors.length > 0 && (
           <div className="absolute left-3 bottom-3 flex flex-col gap-2 rounded-full z-10">
             {topActors.map((actor, index) => (
-              <div 
+              <button 
                 key={actor.id} 
-                className="group/avatar relative cursor-pointer"
+                className="group/avatar relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-full"
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={(e) => handleOpenActor(actor.id, e)}
+                aria-label={`Ver detalhes do ator ${actor.displayName}`}
               >
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-pointer transition-transform duration-200 group-hover/avatar:scale-110">
                   {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
@@ -162,7 +175,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                   {/* Seta do tooltip */}
                   <div className="absolute top-1/2 -translate-y-1/2 -left-[4px] border-y-[4px] border-y-transparent border-r-[4px] border-r-black/90" />
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -193,25 +206,33 @@ export function MovieCard({ movie }: MovieCardProps) {
           <button 
             onClick={handleOpenDetails}
             className="flex-1 flex items-center justify-center gap-2 rounded-md bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white border border-sky-500/20 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
+            aria-label={`Ver mais detalhes do filme ${movie.primaryTitle}`}
           >
-            <Info className="h-4 w-4" />
+            <Info className="h-4 w-4" aria-hidden="true" />
             Ver Mais
           </button>
           <button 
             onClick={handleTrailerClick}
             className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
             title="Assistir Trailer"
+            aria-label={`Assistir trailer de ${movie.primaryTitle}`}
           >
-            <Film className="h-4 w-4" />
+            <Film className="h-4 w-4" aria-hidden="true" />
             Trailer
           </button>
         </div>
       </div>
-    </div>
+    </article>
 
     {/* Dialog do Trailer */}
     {isTrailerOpen && (
-      <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isTrailerClosing ? 'animate-fade-out' : 'animate-fade-in'}`} onClick={closeTrailer}>
+      <div 
+        className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isTrailerClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+        onClick={closeTrailer}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Trailer de ${movie.primaryTitle}`}
+      >
         <div className={`relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl ${isTrailerClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
           {/* Botão Fechar */}
           <button 
@@ -237,7 +258,13 @@ export function MovieCard({ movie }: MovieCardProps) {
 
     {/* Dialog de Detalhes do Filme */}
     {isDetailsOpen && (
-      <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isDetailsClosing ? 'animate-fade-out' : 'animate-fade-in'}`} onClick={closeDetails}>
+      <div 
+        className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isDetailsClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+        onClick={closeDetails}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Detalhes de ${movie.primaryTitle}`}
+      >
         <div className={`relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl border border-border shadow-2xl ${isDetailsClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()} data-lenis-prevent>
           {/* Botão Fechar */}
           <button 
@@ -263,7 +290,8 @@ export function MovieCard({ movie }: MovieCardProps) {
                     src={movie.primaryImage.url} 
                     alt={movie.primaryTitle} 
                     fill 
-                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-muted-foreground bg-muted">

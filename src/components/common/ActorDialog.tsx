@@ -70,6 +70,9 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
     <div 
       className={`fixed inset-0 z-[110] flex items-center justify-center bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
       onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={actorDetails ? `Detalhes de ${actorDetails.displayName}` : "Detalhes do Ator"}
     >
       <div 
         className={`relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl border border-border shadow-2xl ${isClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} 
@@ -93,12 +96,13 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
         ) : actorDetails ? (
           <div className="flex flex-col md:flex-row">
             {/* Foto do Ator */}
-            <div className="w-full md:w-[40%] relative aspect-[2/3] md:aspect-auto md:min-h-[500px] bg-muted shrink-0">
+            <div className="w-full md:w-[40%] relative aspect-[2/3] md:aspect-auto md:min-h-[500px] bg-muted shrink-0 rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none overflow-hidden">
               {actorDetails.primaryImage?.url ? (
                 <Image 
                   src={actorDetails.primaryImage.url} 
                   alt={actorDetails.displayName} 
-                  fill 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
                   className="object-cover"
                 />
               ) : (
