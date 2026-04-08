@@ -306,7 +306,10 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
         }`}
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <Typography variant="h6" className="font-bold text-foreground">Filtros de Busca</Typography>
+          <div className="flex items-center gap-2">
+            <FilterList className="text-gray-400" />
+            <Typography variant="h6" className="font-bold text-foreground">Filtros de Busca</Typography>
+          </div>
           <IconButton onClick={() => setIsDrawerOpen(false)} size="small" className="text-muted-foreground">
             <Close />
           </IconButton>
@@ -314,7 +317,7 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
 
         <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 flex flex-col gap-6">
             {/* Filtro: Tipo */}
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth>
               <InputLabel id="type-select-label">Tipo de Título</InputLabel>
               <Select
                 labelId="type-select-label"

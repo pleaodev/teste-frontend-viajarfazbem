@@ -21,7 +21,7 @@ function AllMoviesSkeletonGrid({ limit }: { limit: number }) {
   );
 }
 
-async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit }: any) {
+async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, available }: any) {
   let apiError = false;
   let filteredMovies: any[] = [];
   
@@ -53,15 +53,25 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit }
 
   // Filtro local para garantir resultados corretos
   let rawApiCount = filteredMovies.length;
-  if (type || startYear || endYear || genre) {
+  if (type || startYear || endYear || genre || available) {
     filteredMovies = filteredMovies.filter(movie => {
       let matches = true;
       if (type && movie.type && movie.type !== type) matches = false;
       if (startYear && movie.startYear && movie.startYear < startYear) matches = false;
       if (endYear && movie.startYear && movie.startYear > endYear) matches = false;
-      if (genre && movie.genres) {
-        const selectedGenres = genre.split(",");
-        if (!selectedGenres.some((g: string) => movie.genres?.includes(g))) matches = false;
+      if (genre) {
+        if (!movie.genres) {
+          matches = false;
+        } else {
+          const selectedGenres = genre.split(",");
+          if (!selectedGenres.some((g: string) => movie.genres?.includes(g))) matches = false;
+        }
+      }
+      if (available) {
+        const currentYear = new Date().getFullYear();
+        if (!movie.startYear || movie.startYear > currentYear) {
+          matches = false;
+        }
       }
       return matches;
     });
@@ -161,6 +171,7 @@ export async function AllMoviesSection({
   const startYear = params?.startYear ? Number(params.startYear) : undefined;
   const endYear = params?.endYear ? Number(params.endYear) : undefined;
   const genre = params?.genre as string | undefined;
+  const available = params?.available === "true";
 
   return (
     <section className="container mx-auto px-4 w-full">
@@ -175,7 +186,7 @@ export async function AllMoviesSection({
       </div>
 
       <Suspense 
-        key={JSON.stringify({ q, type, startYear, endYear, genre, page, limit })} 
+        key={JSON.stringify({ q, type, startYear, endYear, genre, page, limit, available })} 
         fallback={<AllMoviesSkeletonGrid limit={limit} />}
       >
         <AllMoviesList 
@@ -186,6 +197,7 @@ export async function AllMoviesSection({
           genre={genre} 
           page={page} 
           limit={limit} 
+          available={available}
         />
       </Suspense>
     </section>
