@@ -49,12 +49,31 @@ export function DirectorMoviesSection() {
   const [selectedLetter, setSelectedLetter] = useState<string>("");
   const [moviePage, setMoviePage] = useState(1);
   const [directorImgErrors, setDirectorImgErrors] = useState<Record<string, boolean>>({});
-  const moviesPerPage = 4;
+  const [moviesPerPage, setMoviesPerPage] = useState(4);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-  // Lock scroll when the menu is open
+  // Ajusta o número de filmes por página de acordo com a tela
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setMoviesPerPage(1);
+      } else if (width < 768) {
+        setMoviesPerPage(2);
+      } else if (width < 1024) {
+        setMoviesPerPage(3);
+      } else {
+        setMoviesPerPage(4);
+      }
+    };
+    handleResize(); // Executa na montagem
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Trava o scrollbar se o menu estiver aberto
   useEffect(() => {
     if (!isSelectOpen) return;
     const preventScroll = (e: WheelEvent | TouchEvent) => {
@@ -188,7 +207,7 @@ export function DirectorMoviesSection() {
               onOpen={() => setIsSelectOpen(true)}
               onClose={() => setIsSelectOpen(false)}
               displayEmpty
-              className="text-foreground border-border"
+              className="text-foreground border-border h-[42px]"
               MenuProps={{ 
                 disableScrollLock: true,
                 slotProps: {

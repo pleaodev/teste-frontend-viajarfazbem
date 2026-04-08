@@ -22,7 +22,7 @@ import {
 import { Search, FilterList, Close } from "@mui/icons-material";
 import { useLenis } from "lenis/react";
 
-export function MovieFilterBar() {
+export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -33,7 +33,7 @@ export function MovieFilterBar() {
   const [isTyping, setIsTyping] = useState(false);
   
   // Estados dos filtros
-  const [limit, setLimit] = useState(searchParams.get("limit") || "12");
+  const [limit, setLimit] = useState(searchParams.get("limit") || defaultLimit);
   const [type, setType] = useState(searchParams.get("type") || "movie");
   const [yearRange, setYearRange] = useState<number[]>([
     Number(searchParams.get("startYear")) || 1985, 
@@ -53,7 +53,29 @@ export function MovieFilterBar() {
   const [onlyAvailable, setOnlyAvailable] = useState(searchParams.get("available") === "true");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-  // Lock scroll when the menu is open
+  // Ajusta o número de filmes por página de acordo com a tela
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const isMobileSmall = width < 640;
+      const isMobileLarge = width >= 640 && width < 768;
+      const isTablet = width >= 768 && width < 1024;
+      
+      setLimit(prev => {
+        if (isMobileSmall) return "1";
+        if (isMobileLarge) return "2";
+        if (isTablet) return "3";
+        if (prev === "1" || prev === "2" || prev === "3") return "4";
+        return prev;
+      });
+    };
+
+    handleResize(); // Executa na montagem
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // trava o scrollbar se o menu estiver aberto
   useEffect(() => {
     if (!isSelectOpen) return;
     const preventScroll = (e: WheelEvent | TouchEvent) => {
@@ -86,8 +108,17 @@ export function MovieFilterBar() {
     if (type) params.set("type", type);
     else params.delete("type");
 
-    if (limit && limit !== "4") params.set("limit", limit);
-    else params.delete("limit");
+    const width = window.innerWidth;
+    if (width < 640) {
+      params.set("limit", "1");
+    } else if (width < 768) {
+      params.set("limit", "2");
+    } else if (width < 1024) {
+      params.set("limit", "3");
+    } else {
+      if (limit && limit !== defaultLimit) params.set("limit", limit);
+      else params.delete("limit");
+    }
 
     params.set("startYear", yearRange[0].toString());
     params.set("endYear", yearRange[1].toString());
@@ -120,7 +151,7 @@ export function MovieFilterBar() {
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     const currentQ = params.get("q") || "";
-    const currentLimit = params.get("limit") || "4";
+    const currentLimit = params.get("limit") || defaultLimit;
     const currentType = params.get("type") || "movie";
     const currentStart = Number(params.get("startYear")) || 1985;
     const currentEnd = Number(params.get("endYear")) || 2026;
@@ -165,7 +196,13 @@ export function MovieFilterBar() {
   };
 
   const handleClear = () => {
-    setLimit("4");
+    const width = window.innerWidth;
+    let expectedLimit = "4";
+    if (width < 640) expectedLimit = "1";
+    else if (width < 768) expectedLimit = "2";
+    else if (width < 1024) expectedLimit = "3";
+    
+    setLimit(expectedLimit);
     setType("movie");
     setYearRange([1985, 2026]);
     setGenres({ action: false, comedy: false, drama: false, scifi: false, horror: false });
@@ -176,16 +213,17 @@ export function MovieFilterBar() {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 w-full md:w-auto">
       {/* Spinner */}
       {(isPending || isTyping) && (
-        <CircularProgress size={20} className="text-sky-500" />
+        <CircularProgress size={20} className="text-sky-500 shrink-0" />
       )}
 
       {/* Input de Busca */}
-      <form onSubmit={handleSearch} className="flex items-center">
+      <form onSubmit={handleSearch} className="flex items-center flex-1 md:flex-none">
         <TextField
           size="small"
+          fullWidth
           placeholder="Buscar por filmes, atores, etc..."
           variant="outlined"
           value={searchQuery}
@@ -193,7 +231,7 @@ export function MovieFilterBar() {
           slotProps={{
             input: {
               startAdornment: <Search className="text-muted-foreground mr-2" fontSize="small" />,
-              className: "bg-card text-foreground rounded-md w-[200px] sm:w-64 md:w-80",
+              className: "bg-card text-foreground rounded-md w-full sm:w-64 md:w-80 h-[42px]",
             }
           }}
           sx={{
@@ -210,14 +248,14 @@ export function MovieFilterBar() {
       </form>
 
       {/* Select limit */}
-      <FormControl size="small" className="min-w-[70px]">
+      <FormControl size="small" className="inline-flex min-w-[70px]">
         <Select
           value={limit}
           onChange={(e) => setLimit(e.target.value)}
           onOpen={() => setIsSelectOpen(true)}
           onClose={() => setIsSelectOpen(false)}
           displayEmpty
-          className="bg-card text-foreground rounded-md h-[40px]"
+          className="bg-card text-foreground rounded-md h-[42px]"
           sx={{
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "rgba(255, 255, 255, 0.2)",
@@ -238,6 +276,9 @@ export function MovieFilterBar() {
             },
           }}
         >
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
           <MenuItem value="4">4</MenuItem>
           <MenuItem value="8">8</MenuItem>
           <MenuItem value="12">12</MenuItem>
@@ -249,6 +290,8 @@ export function MovieFilterBar() {
       <IconButton 
         onClick={() => setIsDrawerOpen(true)}
         sx={{ 
+          width: '42px',
+          height: '42px',
           color: 'var(--foreground)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           backgroundColor: 'rgba(255, 255, 255, 0.05)',

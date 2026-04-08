@@ -208,12 +208,12 @@ export function MovieCard({ movie }: MovieCardProps) {
           </button>
           <button 
             onClick={handleTrailerClick}
-            className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
+            className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1"
             title="Assistir Trailer"
             aria-label={`Assistir trailer de ${movie.primaryTitle}`}
           >
             <Film className="h-4 w-4" aria-hidden="true" />
-            Trailer
+            <span className="md:hidden xl:inline">Trailer</span>
           </button>
         </div>
       </div>

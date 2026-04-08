@@ -1,6 +1,7 @@
 import { getTitles, searchTitles } from "@/services/imdb";
 import { MovieCard, MovieFilterBar } from "@/components/common";
 import { Pagination } from "@/components/common";
+import { headers } from "next/headers";
 
 export async function AllMoviesSection({
   searchParams,
@@ -8,8 +9,23 @@ export async function AllMoviesSection({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const params = await searchParams;
+  const headersList = await headers();
+  const userAgent = headersList.get("user-agent") || "";
+  const isMobile = /mobile|android|iphone|phone/i.test(userAgent);
+  const isTablet = /ipad|tablet/i.test(userAgent) && !isMobile;
+  
+  let defaultLimit = 4;
+  if (isMobile) defaultLimit = 1;
+  else if (isTablet) defaultLimit = 3;
+  
   const page = Number(params?.page) || 1;
-  const limit = Number(params?.limit) || 4;
+
+  let limit = Number(params?.limit) || defaultLimit;
+  if (isMobile) {
+    limit = 1;
+  } else if (isTablet) {
+    limit = 3;
+  }
   
   // Filtros
   const q = params?.q as string | undefined;
@@ -80,8 +96,8 @@ export async function AllMoviesSection({
           <h2 className="text-3xl font-bold tracking-tight">Todos os Filmes</h2>
           <p className="text-muted-foreground">Explore nossa coleção completa de títulos e encontre seus favoritos</p>
         </div>
-        <div className="flex items-center gap-4">
-          <MovieFilterBar />
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <MovieFilterBar defaultLimit={defaultLimit.toString()} />
         </div>
       </div>
 

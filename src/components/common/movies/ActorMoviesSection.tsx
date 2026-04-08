@@ -21,10 +21,29 @@ export function ActorMoviesSection() {
   const [selectedLetter, setSelectedLetter] = useState<string>("");
   const [moviePage, setMoviePage] = useState(1);
   const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
-  const moviesPerPage = 4;
+  const [moviesPerPage, setMoviesPerPage] = useState(4);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  // Ajusta o número de filmes por página de acordo com a tela
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setMoviesPerPage(1);
+      } else if (width < 768) {
+        setMoviesPerPage(2);
+      } else if (width < 1024) {
+        setMoviesPerPage(3);
+      } else {
+        setMoviesPerPage(4);
+      }
+    };
+    handleResize(); // Executa na montagem
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Trava o scroll quando o menu está aberto
   useEffect(() => {
@@ -174,7 +193,7 @@ export function ActorMoviesSection() {
               onOpen={() => setIsSelectOpen(true)}
               onClose={() => setIsSelectOpen(false)}
               displayEmpty
-              className="text-foreground border-border"
+              className="text-foreground border-border h-[42px]"
               MenuProps={{ 
                 disableScrollLock: true,
                 slotProps: {
