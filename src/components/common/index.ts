@@ -7,3 +7,4 @@ export * from './FlyoutMenu';
 export * from './ScrollToTop';
 export * from './HeaderScrollWrapper';
 export * from './LenisProvider';
+export * from './ActorDialog';

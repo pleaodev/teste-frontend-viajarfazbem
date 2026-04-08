@@ -135,9 +135,28 @@ export async function getStarMeter(): Promise<StarMeterResponse> {
   return fetchImdb<StarMeterResponse>("/chart/starmeter");
 }
 
+export interface PersonDetails {
+  id: string;
+  displayName: string;
+  alternativeNames?: string[];
+  primaryImage?: {
+    url: string;
+    width?: number;
+    height?: number;
+  };
+  primaryProfessions?: string[];
+  biography?: string;
+  heightCm?: number;
+  birthName?: string;
+  birthDate?: string;
+  birthLocation?: string;
+  deathDate?: string;
+  deathLocation?: string;
+}
+
 // Detalhes de uma pessoa
-export async function getPersonDetails(personId: string): Promise<StarMeterEntry> {
-  return fetchImdb<StarMeterEntry>(`/names/${personId}`);
+export async function getPersonDetails(personId: string): Promise<PersonDetails> {
+  return fetchImdb<PersonDetails>(`/names/${personId}`);
 }
 
 // Filmografia de uma pessoa

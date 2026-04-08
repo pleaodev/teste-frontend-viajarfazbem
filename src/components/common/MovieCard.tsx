@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, Film, Info, X, Users, Clock, Calendar, Ticket, Loader2, Clapperboard } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
+import { ActorDialog } from "./ActorDialog";
 
 interface MovieCardProps {
   movie: Title;
@@ -18,6 +19,24 @@ export function MovieCard({ movie }: MovieCardProps) {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
+  
+  // Dialog State de Atores
+  const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
+  const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
+
+  const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setSelectedActorId(actorId);
+    setIsActorDialogOpen(true);
+  };
+
+  const handleCloseActor = () => {
+    setIsActorDialogOpen(false);
+    setTimeout(() => setSelectedActorId(null), 300);
+  };
 
   useEffect(() => {
     setImgError(false);
@@ -107,10 +126,11 @@ export function MovieCard({ movie }: MovieCardProps) {
             {topActors.map((actor, index) => (
               <div 
                 key={actor.id} 
-                className="group/avatar relative"
+                className="group/avatar relative cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={(e) => handleOpenActor(actor.id, e)}
               >
-                <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-help transition-transform duration-200 group-hover/avatar:scale-110">
+                <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-transparent/90 overflow-hidden bg-muted shadow-sm cursor-pointer transition-transform duration-200 group-hover/avatar:scale-110">
                   {(!actorImgErrors[actor.id] && actor.primaryImage?.url) ? (
                     <Image 
                       src={actor.primaryImage.url} 
@@ -213,7 +233,7 @@ export function MovieCard({ movie }: MovieCardProps) {
     {/* Dialog de Detalhes do Filme */}
     {isDetailsOpen && (
       <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 md:p-8 backdrop-blur-sm ${isDetailsClosing ? 'animate-fade-out' : 'animate-fade-in'}`} onClick={closeDetails}>
-        <div className={`relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl border border-border shadow-2xl ${isDetailsClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
+        <div className={`relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl border border-border shadow-2xl ${isDetailsClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()} data-lenis-prevent>
           {/* Botão Fechar */}
           <button 
             onClick={(e) => {
@@ -306,7 +326,11 @@ export function MovieCard({ movie }: MovieCardProps) {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {movieDetails.stars.map(star => (
-                        <div key={star.id} className="flex items-center gap-3 bg-muted/30 p-2 rounded-lg border border-border/50">
+                        <div 
+                          key={star.id} 
+                          className="flex items-center gap-3 bg-muted/30 p-2 rounded-lg border border-border/50 cursor-pointer hover:bg-muted/50 transition-colors"
+                          onClick={(e) => handleOpenActor(star.id, e)}
+                        >
                           <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted shrink-0">
                             {star.primaryImage?.url ? (
                               <Image 
@@ -340,6 +364,13 @@ export function MovieCard({ movie }: MovieCardProps) {
         </div>
       </div>
     )}
+
+    {/* Dialog do Ator */}
+    <ActorDialog 
+      actorId={selectedActorId} 
+      isOpen={isActorDialogOpen} 
+      onClose={handleCloseActor} 
+    />
     </>
   );
 }
