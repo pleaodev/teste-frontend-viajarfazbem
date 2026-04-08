@@ -4,7 +4,7 @@ import { Info, Film } from "lucide-react";
 
 export function MovieCardSkeleton() {
   return (
-    <article className="group relative flex flex-col h-[400px] overflow-hidden rounded-xl bg-card border border-border/50 animate-pulse">
+    <article className="group relative flex flex-col h-[726px] overflow-hidden rounded-xl bg-card border border-border/50 animate-pulse">
       {/* Imagem do Filme Skeleton */}
       <div className="relative aspect-[2/3] w-full shrink-0 overflow-hidden bg-muted rounded-t-xl z-0" />
 

@@ -17,7 +17,8 @@ import {
   Switch, 
   Button,
   Slider,
-  CircularProgress
+  CircularProgress,
+  LinearProgress
 } from "@mui/material";
 import { Search, FilterList, Close } from "@mui/icons-material";
 import { useLenis } from "lenis/react";
@@ -305,9 +306,23 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        {/* Loading Indicator */}
+        <Box sx={{ width: '100%', height: '2px', position: 'absolute', top: 0, left: 0, zIndex: 10 }}>
+          {(isPending || isTyping) && (
+            <LinearProgress 
+              sx={{ 
+                backgroundColor: 'rgba(14, 165, 233, 0.2)', // sky-500 opacity
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: '#0ea5e9', // sky-500
+                }
+              }} 
+            />
+          )}
+        </Box>
+
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border mt-1">
           <div className="flex items-center gap-2">
-            <FilterList className="text-gray-400" />
+            <FilterList className="text-sky-500" />
             <Typography variant="h6" className="font-bold text-foreground">Filtros de Busca</Typography>
           </div>
           <IconButton onClick={() => setIsDrawerOpen(false)} size="small" className="text-muted-foreground">
