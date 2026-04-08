@@ -3,7 +3,42 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect, useRef } from "react";
+
+// Hook para adicionar o efeito ripple
+function useRipple(ref: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const elem = ref.current;
+    if (!elem) return;
+
+    const createRipple = (e: MouseEvent) => {
+      const circle = document.createElement("span");
+      const diameter = Math.max(elem.clientWidth, elem.clientHeight);
+      const radius = diameter / 2;
+      const rect = elem.getBoundingClientRect();
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - rect.left - radius}px`;
+      circle.style.top = `${e.clientY - rect.top - radius}px`;
+      circle.style.position = "absolute";
+      circle.classList.add("ripple");
+
+      const existingRipple = elem.getElementsByClassName("ripple")[0];
+      if (existingRipple) {
+        existingRipple.remove();
+      }
+
+      elem.appendChild(circle);
+      
+      // Remove após a animação (600ms)
+      setTimeout(() => {
+        circle.remove();
+      }, 600);
+    };
+
+    elem.addEventListener("mousedown", createRipple);
+    return () => elem.removeEventListener("mousedown", createRipple);
+  }, [ref]);
+}
 
 interface PaginationProps {
   currentPage: number;
@@ -67,9 +102,15 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   const PageItem = ({ 
     href, onClick, className, children, ariaLabel, title, ariaCurrent, disabled 
   }: any) => {
+    const itemRef = useRef<HTMLElement>(null);
+    useRipple(itemRef);
+    
+    // Classes bases que garantem que o overflow hidden funcione para o ripple
+    const baseClassName = `overflow-hidden relative ${className || ''}`;
+
     if (disabled) {
       return (
-        <button disabled className={className} aria-label={ariaLabel} title={title}>
+        <button disabled className={baseClassName} aria-label={ariaLabel} title={title}>
           {children}
         </button>
       );
@@ -77,14 +118,14 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
     
     if (onPageChange) {
       return (
-        <button onClick={onClick} className={className} aria-label={ariaLabel} title={title} aria-current={ariaCurrent}>
+        <button ref={itemRef as any} onClick={onClick} className={baseClassName} aria-label={ariaLabel} title={title} aria-current={ariaCurrent}>
           {children}
         </button>
       );
     }
 
     return (
-      <Link href={href} onClick={onClick} scroll={false} className={className} aria-label={ariaLabel} title={title} aria-current={ariaCurrent}>
+      <Link ref={itemRef as any} href={href} onClick={onClick} scroll={false} className={baseClassName} aria-label={ariaLabel} title={title} aria-current={ariaCurrent}>
         {children}
       </Link>
     );
@@ -103,7 +144,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           title="Primeiro"
         >
           <span className="sr-only">Primeiro</span>
-          {isPending && loadingAction === 'first' ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronsLeft className="h-5 w-5" aria-hidden="true" />}
+          {isPending && loadingAction === 'first' ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <ChevronsLeft className="h-5 w-5" aria-hidden="true" />
+          )}
         </PageItem>
 
         {/* Botão Anterior */}
@@ -116,12 +161,17 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           title="Anterior"
         >
           <span className="sr-only">Anterior</span>
-          {isPending && loadingAction === 'prev' ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronLeft className="h-5 w-5" aria-hidden="true" />}
+          {isPending && loadingAction === 'prev' ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+          )}
         </PageItem>
 
         {/* Números das Páginas */}
         {pages.map((page) => {
           const isCurrent = page === currentPage;
+          const isLoading = isPending && loadingAction === page;
           return (
             <PageItem
               key={page}
@@ -130,11 +180,15 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
               ariaCurrent={isCurrent ? "page" : undefined}
               className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors ring-1 ring-inset h-[40px] !w-[40px] !p-0 shadow-sm ${
                 isCurrent
-                  ? "z-10 bg-sky-500 text-white ring-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+                  ? "z-10 bg-gray-800/60 text-sky-600 ring-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
                   : "text-foreground ring-border hover:bg-muted"
               }`}
             >
-              {isPending && loadingAction === page ? <Loader2 className="h-4 w-4 animate-spin" /> : page}
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                page
+              )}
             </PageItem>
           );
         })}
@@ -149,7 +203,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           title="Próximo"
         >
           <span className="sr-only">Próximo</span>
-          {isPending && loadingAction === 'next' ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronRight className="h-5 w-5" aria-hidden="true" />}
+          {isPending && loadingAction === 'next' ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          )}
         </PageItem>
 
         {/* Botão Última */}
@@ -162,7 +220,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           title="Última"
         >
           <span className="sr-only">Última</span>
-          {isPending && loadingAction === 'last' ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronsRight className="h-5 w-5" aria-hidden="true" />}
+          {isPending && loadingAction === 'last' ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <ChevronsRight className="h-5 w-5" aria-hidden="true" />
+          )}
         </PageItem>
       </nav>
     </div>
