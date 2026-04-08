@@ -62,6 +62,11 @@ export function MovieCard({ movie }: MovieCardProps) {
     }, 300);
   };
 
+  const handleTrailerClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsTrailerOpen(true);
+  };
+
   useEffect(() => {
     let isMounted = true;
 
@@ -193,7 +198,7 @@ export function MovieCard({ movie }: MovieCardProps) {
             Ver Mais
           </button>
           <button 
-            onClick={() => setIsTrailerOpen(true)}
+            onClick={handleTrailerClick}
             className="flex-1 flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer"
             title="Assistir Trailer"
           >

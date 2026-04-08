@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Info, Film, X } from "lucide-react";
 import { Title } from "@/services/imdb";
 
 interface CarouselProps {
@@ -11,6 +11,8 @@ interface CarouselProps {
 
 export function Carousel({ items }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedTrailerTitle, setSelectedTrailerTitle] = useState<string | null>(null);
+  const [isTrailerClosing, setIsTrailerClosing] = useState(false);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % items.length);
@@ -19,6 +21,14 @@ export function Carousel({ items }: CarouselProps) {
   const prevSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   }, [items.length]);
+
+  const closeTrailer = () => {
+    setIsTrailerClosing(true);
+    setTimeout(() => {
+      setSelectedTrailerTitle(null);
+      setIsTrailerClosing(false);
+    }, 300);
+  };
 
   // Autoplay functionality
   useEffect(() => {
@@ -90,9 +100,17 @@ export function Carousel({ items }: CarouselProps) {
                     {item.plot || "Descrição não disponível."}
                   </p>
                   
-                  <div className="mt-4">
-                    <button className="px-6 py-3 bg-background/60 hover:bg-white/100 text-foreground/80 hover:text-black/80 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 group-hover:opacity-100 transition-all">
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <button className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer">
+                      <Info className="w-5 h-5" />
                       Ver Mais
+                    </button>
+                    <button 
+                      onClick={() => setSelectedTrailerTitle(item.primaryTitle)}
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
+                    >
+                      <Film className="w-5 h-5" />
+                      Trailer
                     </button>
                   </div>
                 </div>
@@ -131,6 +149,30 @@ export function Carousel({ items }: CarouselProps) {
           />
         ))}
       </div>
+
+      {/* Dialog do Trailer */}
+      {selectedTrailerTitle && (
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm ${isTrailerClosing ? 'animate-fade-out' : 'animate-fade-in'}`} onClick={closeTrailer}>
+          <div className={`relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl ${isTrailerClosing ? 'animate-fade-out-down' : 'animate-fade-in-up'}`} onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                closeTrailer();
+              }}
+              className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-white/20 transition-colors border border-white/20 cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <iframe
+              className="w-full h-full"
+              src={`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(selectedTrailerTitle + " trailer")}&autoplay=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
