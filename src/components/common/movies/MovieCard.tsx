@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, Film, Info } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
-import { ActorDialog } from "./ActorDialog";
-import { TrailerDialog } from "./TrailerDialog";
-import { MovieDetailsDialog } from "./MovieDetailsDialog";
+import { ActorDialog } from "../dialogs/ActorDialog";
+import { TrailerDialog } from "../dialogs/TrailerDialog";
+import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
 
 interface MovieCardProps {
   movie: Title;

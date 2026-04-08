@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star, Info, Film, X } from "lucide-react";
 import { Title } from "@/services/imdb";
-import { TrailerDialog } from "./TrailerDialog";
+import { TrailerDialog } from "../dialogs/TrailerDialog";
 
 interface CarouselProps {
   items: Title[];

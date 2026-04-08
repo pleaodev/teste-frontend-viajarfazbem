@@ -7,7 +7,7 @@ import { MovieCard } from "./MovieCard";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
 
-import { Pagination } from "./Pagination";
+import { Pagination } from "../ui/Pagination";
 
 export function ActorMoviesSection() {
   const [actors, setActors] = useState<StarMeterEntry[]>([]);

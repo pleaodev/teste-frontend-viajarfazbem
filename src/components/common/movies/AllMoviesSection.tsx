@@ -1,7 +1,6 @@
 import { getTitles, searchTitles } from "@/services/imdb";
-import { MovieCard } from "@/components/common/MovieCard";
-import { Pagination } from "@/components/common/Pagination";
-import { MovieFilterBar } from "@/components/common/MovieFilterBar";
+import { MovieCard, MovieFilterBar } from "@/components/common";
+import { Pagination } from "@/components/common";
 
 export async function AllMoviesSection({
   searchParams,

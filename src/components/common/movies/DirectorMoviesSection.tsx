@@ -7,7 +7,7 @@ import { MovieCard } from "./MovieCard";
 import { Loader2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Select, MenuItem, FormControl } from "@mui/material";
 
-import { Pagination } from "./Pagination";
+import { Pagination } from "../ui/Pagination";
 
 const DIRECTORS_LIST: StarMeterEntry[] = [
   { id: "nm0634240", displayName: "Christopher Nolan", primaryImage: { url: "https://m.media-amazon.com/images/M/MV5BNjE3NDQyOTYyMV5BMl5BanBnXkFtZTcwODcyODU2Mw@@._V1_.jpg" } },

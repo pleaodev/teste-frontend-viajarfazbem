@@ -1,8 +1,5 @@
 import { getTitles } from "@/services/imdb";
-import { Carousel } from "@/components/common/Carousel";
-import { AllMoviesSection } from "@/components/common/AllMoviesSection";
-import { ActorMoviesSection } from "@/components/common/ActorMoviesSection";
-import { DirectorMoviesSection } from "@/components/common/DirectorMoviesSection";
+import { Carousel, AllMoviesSection, ActorMoviesSection, DirectorMoviesSection } from "@/components/common";
 
 export default async function Home({
   searchParams,

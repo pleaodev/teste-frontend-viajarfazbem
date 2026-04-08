@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ThemeToggle } from "./ThemeToggle";
+import { ThemeToggle } from "../ui/ThemeToggle";
 import { FlyoutMenu } from "./FlyoutMenu";
 import { getTitles, Title } from "@/services/imdb";
 import { HeaderScrollWrapper } from "./HeaderScrollWrapper";
