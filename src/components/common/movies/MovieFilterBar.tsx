@@ -233,10 +233,10 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           sx={{
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
-                borderColor: "rgba(255, 255, 255, 0.2)",
+                borderColor: "var(--border)",
               },
               "&:hover fieldset": {
-                borderColor: "rgba(255, 255, 255, 0.3)",
+                borderColor: "var(--muted-foreground)",
               },
             }
           }}
@@ -254,10 +254,10 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           className="bg-card text-foreground rounded-md h-[42px]"
           sx={{
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "rgba(255, 255, 255, 0.2)",
+              borderColor: "var(--border)",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "rgba(255, 255, 255, 0.3)",
+              borderColor: "var(--muted-foreground)",
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
               borderColor: "#0ea5e9", // text-sky-500
@@ -290,10 +290,10 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
           width: '42px',
           height: '42px',
           color: 'var(--foreground)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          border: '1px solid var(--border)',
+          backgroundColor: 'var(--muted)',
           '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: 'var(--border)',
           }
         }}
       >
@@ -302,7 +302,7 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
 
       {/* Tailwind Drawer */}
       <div 
-        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-black border-l border-border z-[210] transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-background border-l border-border z-[210] transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl ${
           isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -400,7 +400,7 @@ export function MovieFilterBar({ defaultLimit = "4" }: { defaultLimit?: string }
             </Box>
           </div>
 
-          <div className="p-6 border-t border-border flex gap-3 bg-black">
+          <div className="p-6 border-t border-border flex gap-3 bg-background">
             <Button 
               variant="outlined" 
               fullWidth 

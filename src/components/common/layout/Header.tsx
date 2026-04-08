@@ -43,7 +43,7 @@ export async function Header() {
           height={32} 
           style={{ width: "120px", height: "32px" }}
           priority
-          className="hidden md:block"
+          className="hidden md:block dark:brightness-0 dark:invert"
         />
         <Image 
           src="/images/brands/logo-viajar-faz-bem-portal.svg" 
@@ -52,7 +52,7 @@ export async function Header() {
           height={26} 
           style={{ width: "100px", height: "26px" }}
           priority
-          className="md:hidden"
+          className="md:hidden dark:brightness-0 dark:invert"
         />
       </div>
       <nav className="hidden md:flex items-center gap-8 relative">

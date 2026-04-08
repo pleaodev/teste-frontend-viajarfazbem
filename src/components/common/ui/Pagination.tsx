@@ -180,7 +180,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
               ariaCurrent={isCurrent ? "page" : undefined}
               className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors ring-1 ring-inset h-[40px] !w-[40px] !p-0 dark:shadow-sm overflow-hidden ${
                 isCurrent
-                  ? "z-10 bg-gray-100 text-sky-500 ring-gray-300 hover:bg-sky-700 dark:bg-sky-500/20 dark:text-sky-400 dark:ring-sky-500/50 dark:hover:bg-sky-500/30"
+                  ? "z-10 bg-sky-100 text-sky-700 ring-sky-300 hover:bg-sky-200 dark:bg-sky-500/20 dark:text-sky-400 dark:ring-sky-500/50 dark:hover:bg-sky-500/30"
                   : "text-foreground ring-border hover:bg-muted"
               }`}
             >

@@ -12,7 +12,7 @@ export function FlyoutMenu({ label, items }: FlyoutMenuProps) {
       <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground cursor-pointer py-2">
         {label}
       </span>
-      <div className="absolute left-1/2 -translate-x-1/2 top-full hidden w-[600px] pt-4 group-hover:block z-50">
+      <div className="absolute left-1/2 -translate-x-1/2 top-full w-[600px] pt-4 z-50 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-out">
         <div className="rounded-lg border border-border bg-background p-4 shadow-lg">
           <div className="mb-4 pb-2 border-b border-border">
             <h3 className="text-sm font-semibold text-foreground">

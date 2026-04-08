@@ -194,7 +194,18 @@ export function ActorMoviesSection() {
               onOpen={() => setIsSelectOpen(true)}
               onClose={() => setIsSelectOpen(false)}
               displayEmpty
-              className="text-foreground border-border h-[42px]"
+              className="text-foreground h-[42px]"
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--border)",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--muted-foreground)",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#0ea5e9",
+                }
+              }}
               MenuProps={{ 
                 disableScrollLock: true,
                 slotProps: {
