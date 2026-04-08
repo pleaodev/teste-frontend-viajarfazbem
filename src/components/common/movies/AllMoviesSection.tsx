@@ -181,7 +181,9 @@ export async function AllMoviesSection({
           <p className="text-muted-foreground">Explore nossa coleção completa de títulos e encontre seus favoritos</p>
         </div>
         <div className="flex items-center gap-4 w-full md:w-auto shrink-0">
-          <MovieFilterBar defaultLimit={defaultLimit.toString()} />
+          <Suspense fallback={<div className="h-[42px] w-full md:w-[400px] bg-muted animate-pulse rounded-md" />}>
+            <MovieFilterBar defaultLimit={defaultLimit.toString()} />
+          </Suspense>
         </div>
       </div>
 

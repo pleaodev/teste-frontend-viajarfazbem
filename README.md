@@ -2,6 +2,9 @@
 
 Desenvolvi essa aplicação em resposta ao desafio proposto pela Coobrastur, para explorar um catálogo de filmes fornecido pela API TMDB. O app cumpre com os requisitos exigidos e amplia as funcionalidades com filtros avançados, como por diretor e ator; possui paginação inteligente para driblar as limitações impostas pela API, evitando erros excessivos 429 (Too Many Requests).
 
+Subi o projeto para produção em meu servidor local, você pode acessar em
+[https://teste.pedro-sperandio.com.br](https://teste.pedro-sperandio.com.br)
+
 ## Bibliotecas e tecnologias utilizadas
 
 - **[Next.js (v16.2)](https://nextjs.org/)**: Framework React com App Router.
@@ -24,7 +27,7 @@ Desenvolvi essa aplicação em resposta ao desafio proposto pela Coobrastur, par
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/Coobrastur/teste-frontend-viajarfazbem.git
+git clone https://github.com/pleaodev/teste-frontend-viajarfazbem.git
 cd teste-frontend-viajarfazbem
 ```
 
@@ -34,16 +37,13 @@ npm install
 # ou yarn install / pnpm install
 ```
 
-3. Configure as variáveis de ambiente:
-Crie um arquivo `.env.local` na raiz do projeto com as chaves de API necessárias (ex: chaves para a API de filmes utilizada, como TMDB).
-
-4. Inicie o servidor de desenvolvimento:
+3. Inicie o servidor de desenvolvimento:
 ```bash
 npm run dev
 # ou yarn dev / pnpm dev
 ```
 
-5. Abra o navegador e acesse [http://localhost:3000](http://localhost:3000).
+4. Abra o navegador e acesse [http://localhost:3000](http://localhost:3000).
 
 ---
 

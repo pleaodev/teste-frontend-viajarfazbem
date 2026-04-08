@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { batchGetTitles, Title, StarMeterEntry } from "@/services/imdb";
 import { MovieCard } from "./MovieCard";
@@ -328,11 +328,13 @@ export function DirectorMoviesSection() {
               
               {totalPages > 1 && (
                 <div className="w-full flex flex-col md:flex-row items-center justify-between py-8">
-                  <Pagination 
-                    currentPage={moviePage} 
-                    totalPages={totalPages} 
-                    onPageChange={setMoviePage} 
-                  />
+                  <Suspense fallback={<div className="h-10 w-64 bg-muted animate-pulse rounded-md" />}>
+                    <Pagination 
+                      currentPage={moviePage} 
+                      totalPages={totalPages} 
+                      onPageChange={setMoviePage} 
+                    />
+                  </Suspense>
                   <div className="text-sm text-muted-foreground font-medium mt-4 md:mt-0">
                     Página {moviePage} de {totalPages}
                   </div>
