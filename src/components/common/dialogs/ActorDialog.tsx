@@ -22,7 +22,13 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
       setActorDetails(null);
       getPersonDetails(actorId)
         .then(data => setActorDetails(data))
-        .catch(err => console.error("Erro ao buscar detalhes do ator:", err))
+        .catch((err: any) => {
+          if (err?.message?.includes("429")) {
+            console.warn("[ActorDialog] Rate limit (429) ao buscar detalhes do ator.");
+          } else {
+            console.warn("Erro ao buscar detalhes do ator:", err?.message || err);
+          }
+        })
         .finally(() => setIsLoading(false));
     }
   }, [isOpen, actorId]);

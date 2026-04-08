@@ -104,8 +104,12 @@ export function DirectorMoviesSection() {
       } else {
         setDirectorMovies([]);
       }
-    } catch (error) {
-      console.error("Falha ao buscar filmes do diretor:", error);
+    } catch (error: any) {
+      if (error?.message?.includes("429")) {
+        console.warn("[DirectorMoviesSection] Rate limit (429) ao buscar filmes do diretor.");
+      } else {
+        console.warn("Falha ao buscar filmes do diretor:", error?.message || error);
+      }
     } finally {
       setIsLoadingMovies(false);
     }

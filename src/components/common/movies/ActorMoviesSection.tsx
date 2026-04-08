@@ -50,8 +50,12 @@ export function ActorMoviesSection() {
         // Busca 100 atores para garantir opções nas letras
         const topActors = (res.names || []).slice(0, 100);
         setActors(topActors);
-      } catch (error) {
-        console.error("Falha ao buscar atores:", error);
+      } catch (error: any) {
+        if (error?.message?.includes("429")) {
+          console.warn("[ActorMoviesSection] Rate limit (429) ao buscar atores.");
+        } else {
+          console.warn("Falha ao buscar atores:", error?.message || error);
+        }
       } finally {
         setIsLoadingActors(false);
       }
@@ -86,8 +90,12 @@ export function ActorMoviesSection() {
       });
         
       setActorMovies(Array.from(uniqueMoviesMap.values()));
-    } catch (error) {
-      console.error("Falha ao buscar filmes do ator:", error);
+    } catch (error: any) {
+      if (error?.message?.includes("429")) {
+        console.warn("[ActorMoviesSection] Rate limit (429) ao buscar filmes do ator.");
+      } else {
+        console.warn("Falha ao buscar filmes do ator:", error?.message || error);
+      }
     } finally {
       setIsLoadingMovies(false);
     }

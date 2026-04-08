@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star, Info, Film, X } from "lucide-react";
-import { Title } from "@/services/imdb";
+import { ChevronLeft, ChevronRight, Star, Info, Film } from "lucide-react";
+import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
+import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
+import { ActorDialog } from "../dialogs/ActorDialog";
 
 interface CarouselProps {
   items: Title[];
@@ -13,6 +15,56 @@ interface CarouselProps {
 export function Carousel({ items }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTrailerTitle, setSelectedTrailerTitle] = useState<string | null>(null);
+
+  const [selectedMovieForDetails, setSelectedMovieForDetails] = useState<Title | null>(null);
+  const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  
+  // Dialog State de Atores
+  const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
+  const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
+
+  const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setSelectedActorId(actorId);
+    setIsActorDialogOpen(true);
+  };
+
+  const handleCloseActor = () => {
+    setIsActorDialogOpen(false);
+    setTimeout(() => setSelectedActorId(null), 300);
+  };
+
+  const handleOpenDetails = async (movie: Title) => {
+    setSelectedMovieForDetails(movie);
+    setIsDetailsOpen(true);
+    setMovieDetails(null);
+    setIsLoadingDetails(true);
+    try {
+      const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
+      setMovieDetails(details);
+    } catch (error: any) {
+      if (error?.message?.includes("429")) {
+        console.warn("[Carousel] Rate limit (429) ao buscar detalhes do filme.");
+      } else {
+        console.warn("Erro ao buscar detalhes do filme:", error?.message || error);
+      }
+    } finally {
+      setIsLoadingDetails(false);
+    }
+  };
+
+  const closeDetails = () => {
+    setIsDetailsOpen(false);
+    setTimeout(() => {
+      setSelectedMovieForDetails(null);
+      setMovieDetails(null);
+    }, 300);
+  };
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % items.length);
@@ -27,11 +79,13 @@ export function Carousel({ items }: CarouselProps) {
   // Autoplay
   useEffect(() => {
     if (!items || items.length === 0) return;
+    if (isDetailsOpen || selectedTrailerTitle || isActorDialogOpen) return;
+    
     const timer = setInterval(() => {
       nextSlide();
     }, 6000);
     return () => clearInterval(timer);
-  }, [items?.length, nextSlide]);
+  }, [items?.length, nextSlide, isDetailsOpen, selectedTrailerTitle, isActorDialogOpen]);
 
   if (!items || items.length === 0) return null;
 
@@ -95,6 +149,7 @@ export function Carousel({ items }: CarouselProps) {
                   
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     <button 
+                      onClick={() => handleOpenDetails(item)}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-500/20 hover:bg-sky-500 text-sky-500 hover:text-white font-semibold rounded-md backdrop-blur-sm border border-sky-500/30 transition-all cursor-pointer"
                       aria-label={`Ver mais detalhes sobre ${item.primaryTitle}`}
                     >
@@ -152,6 +207,26 @@ export function Carousel({ items }: CarouselProps) {
         isOpen={!!selectedTrailerTitle}
         onClose={closeTrailer}
         title={selectedTrailerTitle || ""}
+      />
+
+      {/* Dialog de Detalhes do Filme */}
+      {selectedMovieForDetails && (
+        <MovieDetailsDialog
+          isOpen={isDetailsOpen}
+          onClose={closeDetails}
+          movie={selectedMovieForDetails}
+          movieDetails={movieDetails}
+          isLoading={isLoadingDetails}
+          rating={selectedMovieForDetails.rating?.aggregateRating?.toFixed(1) || "N/A"}
+          onOpenActor={handleOpenActor}
+        />
+      )}
+
+      {/* Dialog de Detalhes do Ator */}
+      <ActorDialog 
+        isOpen={isActorDialogOpen} 
+        onClose={handleCloseActor} 
+        actorId={selectedActorId} 
       />
     </div>
   );

@@ -18,8 +18,12 @@ export default async function Home({
     });
     defaultResponse = response as any;
     topMovies = (defaultResponse.titles || []).slice(0, 10);
-  } catch (error) {
-    console.error("Erro ao buscar top movies:", error);
+  } catch (error: any) {
+    if (error?.message?.includes("429")) {
+      console.warn("[Home] Rate limit (429) ao buscar top movies.");
+    } else {
+      console.warn("Erro ao buscar top movies:", error?.message || error);
+    }
     apiError = true;
   }
 

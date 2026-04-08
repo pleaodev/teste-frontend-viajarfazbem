@@ -38,8 +38,12 @@ export async function AllMoviesSection({
       });
       filteredMovies = filterRes.titles || [];
     }
-  } catch (error) {
-    console.error("Erro ao buscar filtered movies:", error);
+  } catch (error: any) {
+    if (error?.message?.includes("429")) {
+      console.warn("[AllMoviesSection] Rate limit (429) ao buscar filmes.");
+    } else {
+      console.warn("Erro ao buscar filtered movies:", error?.message || error);
+    }
     apiError = true;
   }
 

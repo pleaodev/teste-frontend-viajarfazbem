@@ -73,8 +73,12 @@ export function MovieCard({ movie }: MovieCardProps) {
         if (isMounted) {
           setMovieDetails(details);
         }
-      } catch (error) {
-        console.error("Silent fetch failed", error);
+      } catch (error: any) {
+        if (error?.message?.includes("429")) {
+          console.warn(`[MovieCard] Silent fetch omitido (Rate Limit 429) para: ${movie.primaryTitle}`);
+        } else {
+          console.warn(`[MovieCard] Silent fetch falhou para: ${movie.primaryTitle}`, error?.message || error);
+        }
       }
     };
 
@@ -92,8 +96,12 @@ export function MovieCard({ movie }: MovieCardProps) {
       try {
         const details = await getTitleDetails(movie.id, { info: "base_info,cast" });
         setMovieDetails(details);
-      } catch (error) {
-        console.error("Erro ao buscar detalhes do filme:", error);
+      } catch (error: any) {
+        if (error?.message?.includes("429")) {
+          console.warn("[MovieCard] Rate limit (429) ao buscar detalhes do filme.");
+        } else {
+          console.warn("Erro ao buscar detalhes do filme:", error?.message || error);
+        }
       } finally {
         setIsLoadingDetails(false);
       }

@@ -23,8 +23,12 @@ export async function Header() {
     if (classicMovies.length < 10) {
       classicMovies = classicMoviesRes.titles?.slice(0, 10) || [];
     }
-  } catch (error) {
-    console.error("Erro ao buscar dados para o menu:", error);
+  } catch (error: any) {
+    if (error?.message?.includes("429")) {
+      console.warn("[Header] Rate limit (429) ao buscar dados para o menu.");
+    } else {
+      console.warn("Erro ao buscar dados para o menu:", error?.message || error);
+    }
   }
 
   return (
