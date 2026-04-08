@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { FlyoutMenu } from "./FlyoutMenu";
+import { MobileMenu } from "./MobileMenu";
 import { getTitles, Title } from "@/services/imdb";
 import { HeaderScrollWrapper } from "./HeaderScrollWrapper";
 
@@ -34,16 +35,27 @@ export async function Header() {
   return (
     <HeaderScrollWrapper>
       <div className="flex items-center gap-4">
+        <MobileMenu topMovies={topMovies} latestMovies={latestMovies} classicMovies={classicMovies} />
         <Image 
           src="/images/brands/logo-viajar-faz-bem-portal.svg" 
           alt="ViajarFazBem Logo" 
           width={120} 
           height={32} 
-          style={{ width: "120", height: "32" }}
+          style={{ width: "120px", height: "32px" }}
           priority
+          className="hidden md:block"
+        />
+        <Image 
+          src="/images/brands/logo-viajar-faz-bem-portal.svg" 
+          alt="ViajarFazBem Logo" 
+          width={100} 
+          height={26} 
+          style={{ width: "100px", height: "26px" }}
+          priority
+          className="md:hidden"
         />
       </div>
-      <nav className="flex items-center gap-8 relative">
+      <nav className="hidden md:flex items-center gap-8 relative">
         <span className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer py-2">
           Home
         </span>

@@ -36,11 +36,11 @@ export function HeaderScrollWrapper({ children }: { children: React.ReactNode })
       <div
         className={`fixed left-0 right-0 z-50 flex justify-center transition-transform duration-500 ease-out ${
           isFloating
-            ? "top-4 translate-y-0 pointer-events-auto"
-            : "top-4 -translate-y-[150%] pointer-events-none"
+            ? "top-[5px] md:top-4 translate-y-0 pointer-events-auto"
+            : "top-[5px] md:top-4 -translate-y-[150%] pointer-events-none"
         }`}
       >
-        <div className="container mx-auto px-4 pointer-events-none">
+        <div className="container mx-auto px-[5px] md:px-4 pointer-events-none">
           <header className="w-full bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-[7px] pointer-events-auto">
             <div className="flex h-16 items-center justify-between px-4 sm:px-6">
               {children}

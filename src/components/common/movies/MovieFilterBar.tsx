@@ -247,9 +247,9 @@ export function MovieFilterBar() {
 
       {/* Botão Circular do Filtro */}
       <IconButton 
-        color="foreground" 
         onClick={() => setIsDrawerOpen(true)}
         sx={{ 
+          color: 'var(--foreground)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           backgroundColor: 'rgba(255, 255, 255, 0.05)',
           '&:hover': {
