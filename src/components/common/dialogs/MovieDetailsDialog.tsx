@@ -161,6 +161,7 @@ export function MovieDetailsDialog({
                               src={star.primaryImage.url} 
                               alt={star.displayName} 
                               fill 
+                              sizes="48px"
                               className="object-cover"
                             />
                           ) : (

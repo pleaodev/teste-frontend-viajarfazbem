@@ -43,7 +43,30 @@ export function ActorMoviesSection() {
     };
   }, [isSelectOpen]);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [hasIntersected, setHasIntersected] = useState(false);
+
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasIntersected(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasIntersected) return;
+
     const fetchActors = async () => {
       try {
         const res = await getStarMeter();
@@ -61,7 +84,7 @@ export function ActorMoviesSection() {
       }
     };
     fetchActors();
-  }, []);
+  }, [hasIntersected]);
 
   const handleActorClick = async (actor: StarMeterEntry) => {
     if (selectedActor?.id === actor.id) return;
@@ -123,20 +146,20 @@ export function ActorMoviesSection() {
     moviePage * moviesPerPage
   );
 
-  if (isLoadingActors) {
+  if (!hasIntersected || isLoadingActors) {
     return (
-      <div className="w-full flex justify-center py-12">
+      <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4 min-h-[300px] flex justify-center py-12">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      </section>
     );
   }
 
   if (actors.length === 0) {
-    return null;
+    return <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4 min-h-[300px]" />;
   }
 
   return (
-    <section className="container mx-auto px-4 w-full mb-4">
+    <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold tracking-tight">Filmes por Atores</h2>
@@ -205,6 +228,7 @@ export function ActorMoviesSection() {
                     alt={actor.displayName} 
                     width={128} 
                     height={128} 
+                    sizes="(max-width: 768px) 96px, 128px"
                     className="object-cover w-full h-full bg-muted"
                     onError={() => setActorImgErrors(prev => ({ ...prev, [actor.id]: true }))}
                   />
@@ -214,6 +238,7 @@ export function ActorMoviesSection() {
                     alt={actor.displayName} 
                     width={128} 
                     height={128} 
+                    sizes="(max-width: 768px) 96px, 128px"
                     className="object-cover w-full h-full bg-muted"
                   />
                 )}

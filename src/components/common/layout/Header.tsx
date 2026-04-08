@@ -39,6 +39,7 @@ export async function Header() {
           alt="ViajarFazBem Logo" 
           width={120} 
           height={32} 
+          style={{ width: "120", height: "32" }}
           priority
         />
       </div>

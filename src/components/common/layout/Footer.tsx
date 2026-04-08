@@ -10,6 +10,7 @@ export function Footer() {
               alt="ViajarFazBem Logo" 
               width={150} 
               height={41} 
+              style={{ width: "150", height: "41" }}
               priority
             />
             <p className="text-sm text-muted-foreground mt-5">

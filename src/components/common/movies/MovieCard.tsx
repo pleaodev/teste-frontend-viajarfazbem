@@ -148,6 +148,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                       alt={actor.displayName} 
                       width={40} 
                       height={40} 
+                      sizes="40px"
                       className="object-cover w-full h-full shadow-xx-xl border rounded-full bg-transparent/50"
                       onError={() => setActorImgErrors(prev => ({ ...prev, [actor.id]: true }))}
                     />
@@ -157,6 +158,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                       alt={actor.displayName} 
                       width={40} 
                       height={40} 
+                      sizes="40px"
                       className="object-cover w-full h-full shadow-xx-xl border rounded-full bg-transparent/50"
                     />
                   )}

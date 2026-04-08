@@ -71,7 +71,30 @@ export function DirectorMoviesSection() {
     };
   }, [isSelectOpen]);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [hasIntersected, setHasIntersected] = useState(false);
+
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasIntersected(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasIntersected) return;
+
     // Simulando carregamento para manter padrão de interface
     const fetchDirectors = async () => {
       try {
@@ -84,7 +107,7 @@ export function DirectorMoviesSection() {
       }
     };
     fetchDirectors();
-  }, []);
+  }, [hasIntersected]);
 
   const handleDirectorClick = async (director: StarMeterEntry) => {
     if (selectedDirector?.id === director.id) return;
@@ -137,20 +160,20 @@ export function DirectorMoviesSection() {
     moviePage * moviesPerPage
   );
 
-  if (isLoadingDirectors) {
+  if (!hasIntersected || isLoadingDirectors) {
     return (
-      <div className="w-full flex justify-center py-12">
+      <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4 min-h-[300px] flex justify-center py-12">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      </section>
     );
   }
 
   if (directors.length === 0) {
-    return null;
+    return <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4 min-h-[300px]" />;
   }
 
   return (
-    <section className="container mx-auto px-4 w-full mb-4">
+    <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold tracking-tight">Filmes por Diretores</h2>
@@ -219,6 +242,7 @@ export function DirectorMoviesSection() {
                     alt={director.displayName} 
                     width={128} 
                     height={128} 
+                    sizes="(max-width: 768px) 96px, 128px"
                     className="object-cover w-full h-full bg-muted"
                     onError={() => setDirectorImgErrors(prev => ({ ...prev, [director.id]: true }))}
                   />
@@ -228,6 +252,7 @@ export function DirectorMoviesSection() {
                     alt={director.displayName} 
                     width={128} 
                     height={128} 
+                    sizes="(max-width: 768px) 96px, 128px"
                     className="object-cover w-full h-full bg-muted"
                   />
                 )}
