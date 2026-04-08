@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { getStarMeter, getPersonFilmography, Title, StarMeterEntry } from "@/services/imdb";
 import { MovieCard } from "./MovieCard";
@@ -23,12 +23,14 @@ export function ActorMoviesSection() {
   const [moviePage, setMoviePage] = useState(1);
   const [actorImgErrors, setActorImgErrors] = useState<Record<string, boolean>>({});
   const [moviesPerPage, setMoviesPerPage] = useState(4);
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   // Ajusta o número de filmes por página de acordo com a tela
   useEffect(() => {
+    setMounted(true);
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 640) {
@@ -314,11 +316,13 @@ export function ActorMoviesSection() {
               
               {totalPages > 1 && (
                 <div className="w-full flex flex-col md:flex-row items-center justify-between py-8">
-                  <Pagination 
-                    currentPage={moviePage} 
-                    totalPages={totalPages} 
-                    onPageChange={setMoviePage} 
-                  />
+                  <Suspense fallback={<div className="h-10 w-64 bg-muted animate-pulse rounded-md" />}>
+                    <Pagination 
+                      currentPage={moviePage} 
+                      totalPages={totalPages} 
+                      onPageChange={setMoviePage} 
+                    />
+                  </Suspense>
                   <div className="text-sm text-muted-foreground font-medium mt-4 md:mt-0">
                     Página {moviePage} de {totalPages}
                   </div>
