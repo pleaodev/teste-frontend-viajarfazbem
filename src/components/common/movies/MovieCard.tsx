@@ -169,7 +169,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         {/* Botão Favoritar (Coração) */}
         <button
           onClick={handleToggleFavorite}
-          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 border-none ${favorite ? 'bg-black/60' : 'bg-black/40 hover:bg-black/60 text-white/90 hover:text-white'}`}
+          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 border-none ${favorite ? 'bg-white dark:bg-black/60 shadow-md' : 'bg-black/40 hover:bg-black/60 text-white/90 hover:text-white'}`}
           aria-label={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
           aria-pressed={favorite}
         >

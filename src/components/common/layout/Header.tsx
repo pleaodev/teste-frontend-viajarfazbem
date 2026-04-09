@@ -63,7 +63,7 @@ export async function Header() {
         </Link>
       </div>
       <nav className="hidden lg:flex items-center gap-8 relative">
-        <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer py-2">
+        <Link href="/" className="text-sm font-semibold text-foreground opacity-80 hover:opacity-100 transition-opacity cursor-pointer py-2">
           Home
         </Link>
         <FlyoutMenu label="Top 10 Filmes" items={topMovies} />

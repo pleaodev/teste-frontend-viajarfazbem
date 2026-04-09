@@ -105,7 +105,7 @@ export function MovieDetailsDialog({
                   e.stopPropagation();
                   toggleFavorite(movie);
                 }}
-                className={`absolute top-4 left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(movie.id) ? 'bg-black/60' : 'bg-black/40 hover:bg-black/60'} shadow-lg`}
+                className={`absolute top-4 left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(movie.id) ? 'bg-white dark:bg-black/60 shadow-md' : 'bg-black/40 hover:bg-black/60'} shadow-lg`}
                 aria-label={isFavorite(movie.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                 aria-pressed={isFavorite(movie.id)}
               >

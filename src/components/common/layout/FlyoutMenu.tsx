@@ -71,7 +71,7 @@ export function FlyoutMenu({ label, items }: FlyoutMenuProps) {
   return (
     <>
       <div className="relative group">
-        <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground cursor-pointer py-2">
+        <span className="text-sm font-semibold text-foreground opacity-80 group-hover:opacity-100 transition-opacity cursor-pointer py-2">
           {label}
         </span>
         <div className="absolute left-1/2 -translate-x-1/2 top-full w-[600px] pt-4 z-50 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-out">

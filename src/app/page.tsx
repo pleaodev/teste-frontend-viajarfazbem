@@ -52,22 +52,22 @@ export default async function Home({
         {/* Filtro Global sobre o Carrossel */}
         <div className="absolute top-6 md:top-8 inset-x-0 z-20 pointer-events-none">
           <div className="container mx-auto px-4">
-            <div className="inline-flex items-center gap-4 md:gap-6 pointer-events-auto drop-shadow-md">
+            <div className="inline-flex items-center gap-4 md:gap-6 pointer-events-auto dark:drop-shadow-md">
               <Link 
                 href="/?type=movie" 
-                className={`text-sm md:text-base font-semibold transition-colors ${type === 'movie' ? 'text-white' : 'text-gray-400 hover:text-gray-300'}`}
+                className={`text-sm md:text-base font-semibold transition-colors ${type === 'movie' ? 'text-foreground dark:text-white' : 'text-gray-400 hover:text-foreground dark:text-gray-400 dark:hover:text-gray-300'}`}
               >
                 Filmes
               </Link>
               <Link 
                 href="/?type=tvSeries" 
-                className={`text-sm md:text-base font-semibold transition-colors ${type === 'tvSeries' ? 'text-white' : 'text-gray-400 hover:text-gray-300'}`}
+                className={`text-sm md:text-base font-semibold transition-colors ${type === 'tvSeries' ? 'text-foreground dark:text-white' : 'text-gray-400 hover:text-foreground dark:text-gray-400 dark:hover:text-gray-300'}`}
               >
                 Séries
               </Link>
               <Link 
                 href="/?type=documentary" 
-                className={`text-sm md:text-base font-semibold transition-colors ${type === 'documentary' ? 'text-white' : 'text-gray-400 hover:text-gray-300'}`}
+                className={`text-sm md:text-base font-semibold transition-colors ${type === 'documentary' ? 'text-foreground dark:text-white' : 'text-gray-400 hover:text-foreground dark:text-gray-400 dark:hover:text-gray-300'}`}
               >
                 Documentários
               </Link>

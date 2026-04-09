@@ -200,7 +200,7 @@ export function Carousel({ items }: CarouselProps) {
                         e.stopPropagation();
                         toggleFavorite(item);
                       }}
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(item.id) ? 'bg-black/40 hover:bg-black/60' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(item.id) ? 'bg-white dark:bg-black/40 dark:hover:bg-black/60 shadow-md' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
                       aria-label={isFavorite(item.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                       aria-pressed={isFavorite(item.id)}
                     >
