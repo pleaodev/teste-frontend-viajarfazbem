@@ -127,7 +127,9 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, 
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4 text-center">
-        <p className="text-xl text-muted-foreground">Nenhum filme encontrado nesta página.</p>
+        <p className="text-xl text-muted-foreground">
+          Nenhum(a) {type === "movie" ? "filme" : type === "tvSeries" ? "série" : "documentário"} encontrado(a) nesta página.
+        </p>
       </div>
       
       {/* Mantém a paginação visível mesmo sem resultados, permitindo que o usuário volte */}
@@ -177,7 +179,9 @@ export async function AllMoviesSection({
     <section className="container mx-auto px-4 w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="text-3xl font-bold tracking-tight">Todos os Filmes</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            {type === "movie" ? "Todos os Filmes" : type === "tvSeries" ? "Todas as Séries" : "Todos os Documentários"}
+          </h2>
           <p className="text-muted-foreground">Explore nossa coleção completa de títulos e encontre seus favoritos</p>
         </div>
         <div className="flex items-center gap-4 w-full md:w-auto shrink-0">

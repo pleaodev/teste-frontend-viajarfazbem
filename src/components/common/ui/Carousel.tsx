@@ -79,6 +79,11 @@ export function Carousel({ items }: CarouselProps) {
 
   const closeTrailer = () => setSelectedTrailerTitle(null);
 
+  // Reseta o índice se os itens mudarem
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [items]);
+
   // Autoplay
   useEffect(() => {
     if (!items || items.length === 0) return;
