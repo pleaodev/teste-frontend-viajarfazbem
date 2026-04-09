@@ -29,7 +29,7 @@ export function ScrollToTop() {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 p-3 rounded-full bg-gray-600 text-white shadow-lg hover:bg-gray-700 hover:scale-110 transition-all duration-300 z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${
+      className={`fixed bottom-6 right-6 p-3 rounded-full bg-gray-600 text-white shadow-lg hover:bg-gray-700 hover:scale-110 transition-all duration-300 z-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
       }`}
       aria-label="Voltar ao topo"

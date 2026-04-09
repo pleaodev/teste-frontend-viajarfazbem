@@ -38,7 +38,7 @@ const DIRECTOR_MOVIES_MAP: Record<string, string[]> = {
   "nm0594503": ["tt0245429", "tt0096283", "tt0119698", "tt0347149", "tt0876563"]  // Hayao Miyazaki
 };
 
-export function DirectorMoviesSection() {
+export function DirectorMoviesSection({ type = "movie" }: { type?: string }) {
   const lenis = useLenis();
   const [directors, setDirectors] = useState<StarMeterEntry[]>([]);
   const [selectedDirector, setSelectedDirector] = useState<StarMeterEntry | null>(null);
@@ -73,6 +73,13 @@ export function DirectorMoviesSection() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Reset state when type changes
+  useEffect(() => {
+    setSelectedDirector(null);
+    setDirectorMovies([]);
+    setMoviePage(1);
+  }, [type]);
 
   // Trava o scrollbar se o menu estiver aberto
   useEffect(() => {
@@ -143,7 +150,7 @@ export function DirectorMoviesSection() {
         const res = await batchGetTitles(movieIds);
         const validMovies = res.titles || [];
           
-        setDirectorMovies(validMovies);
+        setDirectorMovies(validMovies.filter(m => m.type === type));
       } else {
         setDirectorMovies([]);
       }
@@ -196,7 +203,9 @@ export function DirectorMoviesSection() {
     <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="text-3xl font-bold tracking-tight">Filmes por Diretores</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            {type === "movie" ? "Filmes" : type === "tvSeries" ? "Séries" : "Documentários"} por Diretores
+          </h2>
           <p className="text-muted-foreground">Selecione um diretor para ver títulos relacionados a ele</p>
         </div>
 
@@ -342,8 +351,8 @@ export function DirectorMoviesSection() {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12 text-center border border-border/50 rounded-xl bg-card/30">
-              <p className="text-muted-foreground text-lg">Nenhum título encontrado para este diretor na busca.</p>
+            <div className="w-full py-12 text-center text-muted-foreground">
+              Nenhum(a) {type === "movie" ? "filme" : type === "tvSeries" ? "série" : "documentário"} encontrado(a) para este diretor.
             </div>
           )}
         </div>

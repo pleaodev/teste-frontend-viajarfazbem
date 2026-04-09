@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import { NotificationButton } from "../ui/NotificationButton";
+import { MoreOptionsDropdown } from "../ui/MoreOptionsDropdown";
 import { FlyoutMenu } from "./FlyoutMenu";
 import { MobileMenu } from "./MobileMenu";
 import { getTitles, Title } from "@/services/imdb";
@@ -37,7 +39,7 @@ export async function Header() {
     <HeaderScrollWrapper>
       <div className="flex items-center gap-4">
         <MobileMenu topMovies={topMovies} latestMovies={latestMovies} classicMovies={classicMovies} />
-        <Link href="/" className="hidden md:block">
+        <Link href="/" className="hidden lg:block">
           <Image 
             src="/images/brands/logo-viajar-faz-bem-portal.svg" 
             alt="ViajarFazBem Logo" 
@@ -48,7 +50,7 @@ export async function Header() {
             className="dark:brightness-0 dark:invert"
           />
         </Link>
-        <Link href="/" className="md:hidden">
+        <Link href="/" className="lg:hidden">
           <Image 
             src="/images/brands/logo-viajar-faz-bem-portal.svg" 
             alt="ViajarFazBem Logo" 
@@ -60,8 +62,8 @@ export async function Header() {
           />
         </Link>
       </div>
-      <nav className="hidden md:flex items-center gap-8 relative">
-        <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer py-2">
+      <nav className="hidden lg:flex items-center gap-8 relative">
+        <Link href="/" className="text-sm font-semibold text-foreground opacity-80 hover:opacity-100 transition-opacity cursor-pointer py-2">
           Home
         </Link>
         <FlyoutMenu label="Top 10 Filmes" items={topMovies} />
@@ -69,7 +71,11 @@ export async function Header() {
         <FlyoutMenu label="Clássicos" items={classicMovies} />
       </nav>
       <div className="flex items-center gap-4">
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <NotificationButton />
+          <MoreOptionsDropdown />
+        </div>
         <span className="text-sm font-medium cursor-pointer">Login</span>
       </div>
     </HeaderScrollWrapper>

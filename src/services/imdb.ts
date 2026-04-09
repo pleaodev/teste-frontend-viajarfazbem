@@ -100,6 +100,8 @@ export async function getTitles(params?: {
   sort_order?: string;
   startYear?: number;
   endYear?: number;
+  minVoteCount?: number;
+  minAggregateRating?: number;
 }): Promise<TitlesResponse> {
   return fetchImdb<TitlesResponse>("/titles", params);
 }

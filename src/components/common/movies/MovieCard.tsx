@@ -2,17 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, Film, Info } from "lucide-react";
+import Link from "next/link";
+import { Star, Film, Info, Heart, Play } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { ActorDialog } from "../dialogs/ActorDialog";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
+import { useFavorites } from "../providers/FavoritesProvider";
+import { useWatchHistory } from "../providers/WatchHistoryProvider";
 
 interface MovieCardProps {
   movie: Title;
+  variant?: "default" | "continue";
 }
 
-export function MovieCard({ movie }: MovieCardProps) {
+export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
@@ -23,6 +27,15 @@ export function MovieCard({ movie }: MovieCardProps) {
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
   const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToHistory } = useWatchHistory();
+  const favorite = isFavorite(movie.id);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(movie);
+  };
 
   const handleOpenActor = (actorId: string, e?: React.MouseEvent) => {
     if (e) {
@@ -51,6 +64,7 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   const handleTrailerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    addToHistory(movie); // Registra no histórico ao assistir/trailer
     setIsTrailerOpen(true);
   };
 
@@ -113,10 +127,10 @@ export function MovieCard({ movie }: MovieCardProps) {
   return (
     <>
       <article 
-        itemScope 
-        itemType="https://schema.org/Movie"
-        className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-background"
-      >
+      itemScope 
+      itemType="https://schema.org/Movie"
+      className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg outline-none"
+    >
         <meta itemProp="name" content={movie.primaryTitle} />
         <meta itemProp="image" content={image} />
         {movie.plot && <meta itemProp="description" content={movie.plot} />}
@@ -152,10 +166,20 @@ export function MovieCard({ movie }: MovieCardProps) {
         />
         
         {/* Rating Flutuante */}
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 backdrop-blur-md px-2.5 py-1 text-sm font-medium text-yellow-500 border border-white/10 shadow-sm">
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 backdrop-blur-md px-2.5 py-1 text-sm font-medium text-yellow-500 border-none shadow-sm z-10">
           <Star className="h-3.5 w-3.5 fill-current" />
           <span>{rating}</span>
         </div>
+
+        {/* Botão Favoritar (Coração) */}
+        <button
+          onClick={handleToggleFavorite}
+          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 border-none ${favorite ? 'bg-white dark:bg-black/60 shadow-md' : 'bg-black/40 hover:bg-black/60 text-white/90 hover:text-white'}`}
+          aria-label={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          aria-pressed={favorite}
+        >
+          <Heart className={`h-4 w-4 transition-colors duration-300 ${favorite ? 'fill-red-500 text-red-500' : 'text-white scale-100'}`} />
+        </button>
 
         {/* Avatares Flutuantes dos Atores */}
         {topActors.length > 0 && (
@@ -240,15 +264,32 @@ export function MovieCard({ movie }: MovieCardProps) {
             <Info className="h-4 w-4" aria-hidden="true" />
             Ver Mais
           </button>
-          <button 
-            onClick={handleTrailerClick}
-            className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1"
-            title="Assistir Trailer"
-            aria-label={`Assistir trailer de ${movie.primaryTitle}`}
-          >
-            <Film className="h-4 w-4" aria-hidden="true" />
-            <span className="md:hidden xl:inline">Trailer</span>
-          </button>
+          
+          {variant === "continue" ? (
+            <Link 
+              href={`/player?title=${encodeURIComponent(movie.primaryTitle)}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                addToHistory(movie);
+              }}
+              className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1 shadow-[0_0_10px_rgba(2,132,199,0.3)]"
+              title="Continuar Assistindo"
+              aria-label={`Continuar assistindo ${movie.primaryTitle}`}
+            >
+              <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+              <span className="md:hidden xl:inline">Continuar</span>
+            </Link>
+          ) : (
+            <button 
+              onClick={handleTrailerClick}
+              className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1"
+              title="Assistir Trailer"
+              aria-label={`Assistir trailer de ${movie.primaryTitle}`}
+            >
+              <Film className="h-4 w-4" aria-hidden="true" />
+              <span className="md:hidden xl:inline">Trailer</span>
+            </button>
+          )}
         </div>
       </div>
     </article>

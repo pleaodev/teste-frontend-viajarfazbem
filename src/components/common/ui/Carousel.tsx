@@ -2,11 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star, Info, Film } from "lucide-react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, Star, Info, Film, Heart, PlayCircle } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
 import { ActorDialog } from "../dialogs/ActorDialog";
+import { useFavorites } from "../providers/FavoritesProvider";
+import { useWatchHistory } from "../providers/WatchHistoryProvider";
 
 interface CarouselProps {
   items: Title[];
@@ -20,6 +23,8 @@ export function Carousel({ items }: CarouselProps) {
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToHistory } = useWatchHistory();
   
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
@@ -75,6 +80,11 @@ export function Carousel({ items }: CarouselProps) {
   }, [items.length]);
 
   const closeTrailer = () => setSelectedTrailerTitle(null);
+
+  // Reseta o índice se os itens mudarem
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [items]);
 
   // Autoplay
   useEffect(() => {
@@ -163,6 +173,15 @@ export function Carousel({ items }: CarouselProps) {
                   </p>
                   
                   <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <Link 
+                      href={`/player?title=${encodeURIComponent(item.primaryTitle)}`}
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_15px_rgba(2,132,199,0.5)]"
+                      aria-label={`Assistir ${item.primaryTitle}`}
+                      onClick={() => addToHistory(item)}
+                    >
+                      <PlayCircle className="w-5 h-5" aria-hidden="true" />
+                      Assistir
+                    </Link>
                     <button 
                       onClick={() => handleOpenDetails(item)}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
@@ -172,12 +191,26 @@ export function Carousel({ items }: CarouselProps) {
                       Ver Mais
                     </button>
                     <button 
-                      onClick={() => setSelectedTrailerTitle(item.primaryTitle)}
+                      onClick={() => {
+                        addToHistory(item);
+                        setSelectedTrailerTitle(item.primaryTitle);
+                      }}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
                       aria-label={`Assistir trailer de ${item.primaryTitle}`}
                     >
                       <Film className="w-5 h-5" aria-hidden="true" />
                       Trailer
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(item);
+                      }}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md backdrop-blur-sm border border-foreground/20 transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(item.id) ? 'bg-white dark:bg-black/40 dark:hover:bg-black/60 shadow-md' : 'bg-background/60 hover:bg-white hover:text-black text-foreground/90'}`}
+                      aria-label={isFavorite(item.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                      aria-pressed={isFavorite(item.id)}
+                    >
+                      <Heart className={`h-5 w-5 transition-colors duration-300 ${isFavorite(item.id) ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
                     </button>
                   </div>
                 </div>

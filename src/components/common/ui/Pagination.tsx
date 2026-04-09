@@ -44,9 +44,10 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange?: (page: number) => void;
+  queryParam?: string;
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange, queryParam = "page" }: PaginationProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -55,7 +56,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   const createPageUrl = (pageNumber: number) => {
     if (onPageChange) return "#";
     const params = new URLSearchParams(searchParams?.toString() || "");
-    params.set("page", pageNumber.toString());
+    params.set(queryParam, pageNumber.toString());
     return `/?${params.toString()}`;
   };
 
@@ -70,7 +71,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
 
     setLoadingAction(actionId);
     const params = new URLSearchParams(searchParams?.toString() || "");
-    params.set("page", pageNumber.toString());
+    params.set(queryParam, pageNumber.toString());
     startTransition(() => {
       router.push(`/?${params.toString()}`, { scroll: false });
     });
@@ -139,7 +140,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(1)}
           onClick={(e: any) => handleNavigate(e, 1, 'first')}
           disabled={currentPage <= 1}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 border border-border/50 cursor-not-allowed' : 'text-muted-foreground border border-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Primeira Página"
           title="Primeiro"
         >
@@ -156,7 +157,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(currentPage - 1)}
           onClick={(e: any) => handleNavigate(e, currentPage - 1, 'prev')}
           disabled={currentPage <= 1}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage <= 1 ? 'text-muted-foreground/50 border border-border/50 cursor-not-allowed' : 'text-muted-foreground border border-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Página Anterior"
           title="Anterior"
         >
@@ -178,10 +179,10 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
               href={createPageUrl(page)}
               onClick={(e: any) => handleNavigate(e, page, page)}
               ariaCurrent={isCurrent ? "page" : undefined}
-              className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors ring-1 ring-inset h-[40px] !w-[40px] !p-0 dark:shadow-sm overflow-hidden ${
+              className={`relative inline-flex items-center justify-center rounded-full text-sm font-semibold focus:z-20 focus:outline-offset-0 transition-colors border h-[40px] !w-[40px] !p-0 dark:shadow-sm overflow-hidden ${
                 isCurrent
-                  ? "z-10 bg-sky-100 text-sky-700 ring-sky-300 hover:bg-sky-200 dark:bg-sky-500/20 dark:text-sky-400 dark:ring-sky-500/50 dark:hover:bg-sky-500/30"
-                  : "text-foreground ring-border hover:bg-muted"
+                  ? "z-10 bg-sky-100 text-sky-700 border-sky-300 hover:bg-sky-200 dark:bg-sky-500/20 dark:text-sky-400 dark:border-sky-500/50 dark:hover:bg-sky-500/30"
+                  : "text-foreground border-border hover:bg-muted"
               }`}
             >
               {isLoading ? (
@@ -198,7 +199,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(currentPage + 1)}
           onClick={(e: any) => handleNavigate(e, currentPage + 1, 'next')}
           disabled={currentPage >= totalPages}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 border border-border/50 cursor-not-allowed' : 'text-muted-foreground border border-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Próxima Página"
           title="Próximo"
         >
@@ -215,7 +216,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           href={createPageUrl(totalPages)}
           onClick={(e: any) => handleNavigate(e, totalPages, 'last')}
           disabled={currentPage >= totalPages}
-          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 ring-1 ring-inset ring-border/50 cursor-not-allowed' : 'text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted focus:z-20 transition-colors'}`}
+          className={`relative inline-flex items-center rounded-full justify-center !w-[40px] h-[40px] !p-0 dark:shadow-sm focus:outline-offset-0 ${currentPage >= totalPages ? 'text-muted-foreground/50 border border-border/50 cursor-not-allowed' : 'text-muted-foreground border border-border hover:bg-muted focus:z-20 transition-colors'}`}
           ariaLabel="Última Página"
           title="Última"
         >

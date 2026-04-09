@@ -10,7 +10,7 @@ import { Select, MenuItem, FormControl } from "@mui/material";
 import { useLenis } from "lenis/react";
 import { Pagination } from "../ui/Pagination";
 
-export function ActorMoviesSection() {
+export function ActorMoviesSection({ type = "movie" }: { type?: string }) {
   const lenis = useLenis();
   const [actors, setActors] = useState<StarMeterEntry[]>([]);
   const [selectedActor, setSelectedActor] = useState<StarMeterEntry | null>(null);
@@ -47,6 +47,13 @@ export function ActorMoviesSection() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Reset state se algo mudar
+  useEffect(() => {
+    setSelectedActor(null);
+    setActorMovies([]);
+    setMoviePage(1);
+  }, [type]);
 
   // Trava o scroll quando o menu está aberto
   useEffect(() => {
@@ -122,7 +129,7 @@ export function ActorMoviesSection() {
       const validMovies = (res.credits || [])
         .filter(credit => 
           (credit.category === "actor" || credit.category === "actress") && 
-          credit.title?.type === "movie"
+          credit.title?.type === type
         )
         .map(credit => credit.title);
         
@@ -184,7 +191,9 @@ export function ActorMoviesSection() {
     <section ref={sectionRef} className="container mx-auto px-4 w-full mb-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="text-3xl font-bold tracking-tight">Filmes por Atores</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            {type === "movie" ? "Filmes" : type === "tvSeries" ? "Séries" : "Documentários"} por Atores
+          </h2>
           <p className="text-muted-foreground">Selecione um ator para ver títulos relacionados a ele</p>
         </div>
 
@@ -330,8 +339,8 @@ export function ActorMoviesSection() {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12 text-center border border-border/50 rounded-xl bg-card/30">
-              <p className="text-muted-foreground text-lg">Nenhum título encontrado para este ator na busca.</p>
+            <div className="w-full py-12 text-center text-muted-foreground">
+              Nenhum(a) {type === "movie" ? "filme" : type === "tvSeries" ? "série" : "documentário"} encontrado(a) para este ator.
             </div>
           )}
         </div>
