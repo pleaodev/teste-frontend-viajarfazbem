@@ -45,9 +45,8 @@ export async function Header() {
             alt="ViajarFazBem Logo" 
             width={120} 
             height={32} 
-            style={{ width: "120px", height: "32px" }}
             priority
-            className="dark:brightness-0 dark:invert"
+            className="w-auto h-8 dark:brightness-0 dark:invert"
           />
         </Link>
         <Link href="/" className="lg:hidden">
@@ -56,9 +55,8 @@ export async function Header() {
             alt="ViajarFazBem Logo" 
             width={100} 
             height={26} 
-            style={{ width: "100px", height: "26px" }}
             priority
-            className="dark:brightness-0 dark:invert"
+            className="w-[100px] h-auto dark:brightness-0 dark:invert"
           />
         </Link>
       </div>

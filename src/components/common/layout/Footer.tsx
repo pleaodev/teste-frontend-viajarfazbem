@@ -13,9 +13,8 @@ export function Footer() {
                 alt="ViajarFazBem Logo" 
                 width={150} 
                 height={41} 
-                style={{ width: "150px", height: "41px" }}
                 priority
-                className="dark:brightness-0 dark:invert"
+                className="w-[150px] h-auto dark:brightness-0 dark:invert"
               />
             </Link>
             <p className="text-base md:text-sm text-muted-foreground mt-5">

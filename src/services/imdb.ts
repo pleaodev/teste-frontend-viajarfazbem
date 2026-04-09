@@ -75,7 +75,8 @@ const inFlightRequests = new Map<string, Promise<any>>();
 class RequestQueue {
   private queue: (() => void)[] = [];
   private activeCount = 0;
-  private maxConcurrent = 3; // Limitando a 3 requisições simultâneas para evitar 429
+  private maxConcurrent = 2; // Limitando a 2 requisições simultâneas para evitar 429
+  private delayBetweenRequests = 500; // 500ms de delay antes de liberar a vaga
 
   async enqueue<T>(task: () => Promise<T>): Promise<T> {
     if (this.activeCount >= this.maxConcurrent) {
@@ -86,11 +87,13 @@ class RequestQueue {
     try {
       return await task();
     } finally {
-      this.activeCount--;
-      if (this.queue.length > 0) {
-        const next = this.queue.shift();
-        if (next) next();
-      }
+      setTimeout(() => {
+        this.activeCount--;
+        if (this.queue.length > 0) {
+          const next = this.queue.shift();
+          if (next) next();
+        }
+      }, this.delayBetweenRequests);
     }
   }
 }
