@@ -144,7 +144,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
                 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                   {actorDetails.primaryProfessions && actorDetails.primaryProfessions.length > 0 && (
-                    <span className="flex items-center gap-1.5 bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full font-medium border border-blue-500/20" itemProp="jobTitle">
+                    <span className="flex items-center gap-1.5 bg-sky-500/10 text-sky-500 px-3 py-1 rounded-full font-medium border border-sky-500/20" itemProp="jobTitle">
                       {actorDetails.primaryProfessions.join(", ")}
                     </span>
                   )}
@@ -160,7 +160,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
               {/* Informações Pessoais */}
               <div className="flex flex-col gap-3">
                 <div className="flex items-start gap-3 bg-muted/30 p-3 rounded-lg border border-border/50">
-                  <MapPin className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
+                  <MapPin className="h-5 w-5 text-sky-500 mt-0.5 shrink-0" />
                   <div itemProp="birthPlace">
                     <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Local de Nascimento</span>
                     <span className="text-sm font-medium">{actorDetails.birthLocation || "Não encontrado"}</span>
@@ -169,7 +169,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex items-start gap-3 bg-muted/30 p-3 rounded-lg border border-border/50">
-                    <Calendar className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
+                    <Calendar className="h-5 w-5 text-sky-500 mt-0.5 shrink-0" />
                     <div>
                       <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Nascimento</span>
                       <span className="text-sm font-medium"><span itemProp="birthDate" content={actorDetails.birthDate || ""}>{formatDate(actorDetails.birthDate)}</span></span>
@@ -177,7 +177,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
                   </div>
                   
                   <div className="flex items-start gap-3 bg-muted/30 p-3 rounded-lg border border-border/50">
-                    <Ruler className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
+                    <Ruler className="h-5 w-5 text-sky-500 mt-0.5 shrink-0" />
                     <div itemProp="height" itemScope itemType="https://schema.org/QuantitativeValue">
                       <span className="block text-xs text-muted-foreground font-medium uppercase tracking-wider mb-0.5">Altura</span>
                       <span className="text-sm font-medium">
@@ -206,7 +206,7 @@ export function ActorDialog({ actorId, isOpen, onClose }: ActorDialogProps) {
               {actorDetails.biography && (
                 <div className="mt-2">
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 border-b border-border pb-2">
-                    <Info className="h-5 w-5 text-blue-500" />
+                    <Info className="h-5 w-5 text-sky-500" />
                     Biografia
                   </h3>
                   <div 

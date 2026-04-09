@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Star, Calendar, Clock, Info, Users, Clapperboard, Heart, PlayCircle } from "lucide-react";
+import { X, Star, Calendar, Clock, Info, Users, Clapperboard, Heart, Play } from "lucide-react";
 import { Title, TitleDetails } from "@/services/imdb";
 import { CircularProgress } from "@mui/material";
 import { useFavorites } from "../providers/FavoritesProvider";
@@ -144,7 +144,7 @@ export function MovieDetailsDialog({
                     aria-label={`Assistir ${movie.primaryTitle}`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <PlayCircle className="w-4 h-4 fill-current" aria-hidden="true" />
+                    <Play className="w-4 h-4 fill-current" aria-hidden="true" />
                     Assistir
                   </Link>
                 </div>
@@ -154,7 +154,7 @@ export function MovieDetailsDialog({
               {movieDetails?.genres && movieDetails.genres.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {movieDetails.genres.map(genre => (
-                    <span key={genre} className="px-3 py-1 rounded-full bg-blue-600/10 text-blue-600 border border-blue-600/20 text-sm font-medium">
+                    <span key={genre} className="px-3 py-1 rounded-full bg-sky-600/10 text-sky-600 border border-sky-600/20 text-sm font-medium">
                       {genre}
                     </span>
                   ))}
@@ -165,7 +165,7 @@ export function MovieDetailsDialog({
               {movieDetails?.plot && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-border pb-2">
-                    <Info className="h-5 w-5 text-blue-500" />
+                    <Info className="h-5 w-5 text-sky-500" />
                     Sinopse
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -178,7 +178,7 @@ export function MovieDetailsDialog({
               {movieDetails?.stars && movieDetails.stars.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 border-b border-border pb-2">
-                    <Users className="h-5 w-5 text-blue-500" />
+                    <Users className="h-5 w-5 text-sky-500" />
                     Elenco Principal
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
