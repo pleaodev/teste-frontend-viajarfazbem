@@ -26,7 +26,6 @@ import {
 import { Title } from "@/services/imdb";
 import { MenuDrawer } from "../ui/MenuDrawer";
 import { MovieListDrawer } from "./MovieListDrawer";
-
 import { Menu as MenuIcon } from "lucide-react";
 
 interface MobileMenuProps {

@@ -26,11 +26,13 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, 
   let filteredMovies: any[] = [];
   
   try {
-    const apiLimit = Math.max(50, Math.ceil((page * limit) / 50) * 50);
+    // Limite da API ajustado para buscar pelo menos até a próxima página
+    const apiLimit = Math.max(50, Math.ceil(((page + 1) * limit) / 50) * 50);
 
+    // Se for pesquisa, a API searchTitles não aceita limite tão fácil, então fatiamos o resultado
     if (q) {
-      const searchRes = await searchTitles(q, { limit: apiLimit });
-      filteredMovies = searchRes.titles || [];
+      const searchRes = await searchTitles(q);
+      filteredMovies = searchRes.results || [];
     } else {
       const filterRes = await getTitles({
         titleType: type,
@@ -52,7 +54,6 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, 
   }
 
   // Filtro local para garantir resultados corretos
-  let rawApiCount = filteredMovies.length;
   if (type || startYear || endYear || genre || available) {
     filteredMovies = filteredMovies.filter(movie => {
       let matches = true;
@@ -77,15 +78,9 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, 
     });
   }
 
-  // Paginação local garantida
+  // Paginação local garantida baseada no total retornado
   let totalPages = Math.ceil(filteredMovies.length / limit) || 1;
   const listMovies = filteredMovies.slice((page - 1) * limit, page * limit);
-  
-  // Se a API retornou o lote cheio, pode haver mais filmes no servidor.
-  const apiLimitCalculated = Math.max(50, Math.ceil((page * limit) / 50) * 50);
-  if (rawApiCount >= apiLimitCalculated && page >= totalPages && listMovies.length > 0) {
-    totalPages = page + 1;
-  }
 
   if (apiError) {
     return (

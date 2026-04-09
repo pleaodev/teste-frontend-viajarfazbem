@@ -24,10 +24,9 @@ function TrendingMoviesSkeletonGrid({ limit }: { limit: number }) {
 async function TrendingMoviesList({ type, page, limit }: any) {
   let apiError = false;
   let filteredMovies: any[] = [];
-  let rawApiCount = 0;
   
   try {
-    const apiLimit = Math.max(50, Math.ceil((page * limit) / 50) * 50);
+    const apiLimit = Math.max(50, Math.ceil(((page + 1) * limit) / 50) * 50);
 
     const filterRes = await getTitles({
       titleType: type,
@@ -37,7 +36,6 @@ async function TrendingMoviesList({ type, page, limit }: any) {
       limit: apiLimit
     });
     filteredMovies = filterRes.titles || [];
-    rawApiCount = filteredMovies.length;
   } catch (error: any) {
     if (error?.message?.includes("429")) {
       console.warn("[TrendingMoviesSection] Rate limit (429) ao buscar filmes.");
@@ -59,11 +57,6 @@ async function TrendingMoviesList({ type, page, limit }: any) {
   // Paginação local garantida
   let totalPages = Math.ceil(filteredMovies.length / limit) || 1;
   const listMovies = filteredMovies.slice((page - 1) * limit, page * limit);
-  
-  const apiLimitCalculated = Math.max(50, Math.ceil((page * limit) / 50) * 50);
-  if (rawApiCount >= apiLimitCalculated && page >= totalPages && listMovies.length > 0) {
-    totalPages = page + 1;
-  }
 
   // Override da query string parameter name for pagination
   const paginationQueryParam = "trendingPage";
