@@ -84,7 +84,7 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
               width={100} 
               height={26} 
               style={{ width: 'auto', height: 'auto' }}
-              className="w-[100px] h-[26px] dark:brightness-0 dark:invert"
+              className="!w-[100px] !h-[26px] dark:brightness-0 dark:invert"
             />
           </Link>
         }
