@@ -19,7 +19,7 @@ export function MoreOptionsDropdown() {
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative hidden lg:block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"

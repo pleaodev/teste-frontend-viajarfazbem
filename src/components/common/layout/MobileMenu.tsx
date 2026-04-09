@@ -15,6 +15,11 @@ import {
   DescriptionOutlined, 
   EmailOutlined, 
   FavoriteBorderOutlined,
+  TrendingUpOutlined,
+  WatchLaterOutlined,
+  GroupOutlined,
+  ForumOutlined,
+  SettingsOutlined,
   Instagram, 
   Facebook, 
   Twitter 
@@ -138,6 +143,58 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
               <span className="text-sm font-medium group-hover:text-foreground transition-colors">Clássicos</span>
             </div>
             <ChevronRight className="text-muted-foreground opacity-50 group-hover:opacity-100 group-hover:text-foreground transition-all" fontSize="small" />
+          </div>
+
+          <Divider className="my-2 bg-border" />
+
+          <div 
+            onClick={toggleMainMenu}
+            className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <TrendingUpOutlined className="text-muted-foreground" fontSize="small" />
+              <span className="text-sm font-medium">Tendências</span>
+            </div>
+          </div>
+
+          <div 
+            onClick={toggleMainMenu}
+            className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <WatchLaterOutlined className="text-muted-foreground" fontSize="small" />
+              <span className="text-sm font-medium">Em breve</span>
+            </div>
+          </div>
+
+          <div 
+            onClick={toggleMainMenu}
+            className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <GroupOutlined className="text-muted-foreground" fontSize="small" />
+              <span className="text-sm font-medium">Comunidade</span>
+            </div>
+          </div>
+
+          <div 
+            onClick={toggleMainMenu}
+            className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <ForumOutlined className="text-muted-foreground" fontSize="small" />
+              <span className="text-sm font-medium">Social</span>
+            </div>
+          </div>
+
+          <div 
+            onClick={toggleMainMenu}
+            className="py-3 px-5 rounded-md hover:bg-muted cursor-pointer transition-colors flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <SettingsOutlined className="text-muted-foreground" fontSize="small" />
+              <span className="text-sm font-medium">Configurações</span>
+            </div>
           </div>
 
           <Divider className="my-2 bg-border" />
