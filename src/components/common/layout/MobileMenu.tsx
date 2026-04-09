@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { IconButton, Divider } from "@mui/material";
 import { 
-  Menu, 
   ChevronRight, 
   HomeOutlined, 
   StarBorderOutlined, 
@@ -27,6 +26,8 @@ import {
 import { Title } from "@/services/imdb";
 import { MenuDrawer } from "../ui/MenuDrawer";
 import { MovieListDrawer } from "./MovieListDrawer";
+
+import { Menu as MenuIcon } from "lucide-react";
 
 interface MobileMenuProps {
   topMovies: Title[];
@@ -63,13 +64,13 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
 
   return (
     <div className="lg:hidden flex items-center">
-      <IconButton 
+      <button 
         onClick={toggleMainMenu}
-        sx={{ color: 'var(--foreground)' }}
+        className="p-2 rounded-full hover:bg-muted transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         aria-label="Menu"
       >
-        <Menu />
-      </IconButton>
+        <MenuIcon size={24} />
+      </button>
 
       {/* Menu Principal */}
       <MenuDrawer 

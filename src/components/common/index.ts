@@ -21,5 +21,6 @@ export * from './movies/MovieCard';
 export * from './movies/MovieCardSkeleton';
 export * from './movies/ActorMoviesSection';
 export * from './movies/AllMoviesSection';
+export * from './movies/TrendingMoviesSection';
 export * from './movies/DirectorMoviesSection';
 export * from './movies/MovieFilterBar';

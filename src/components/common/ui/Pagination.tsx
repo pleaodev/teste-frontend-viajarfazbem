@@ -44,9 +44,10 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange?: (page: number) => void;
+  queryParam?: string;
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange, queryParam = "page" }: PaginationProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -55,7 +56,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   const createPageUrl = (pageNumber: number) => {
     if (onPageChange) return "#";
     const params = new URLSearchParams(searchParams?.toString() || "");
-    params.set("page", pageNumber.toString());
+    params.set(queryParam, pageNumber.toString());
     return `/?${params.toString()}`;
   };
 
@@ -70,7 +71,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
 
     setLoadingAction(actionId);
     const params = new URLSearchParams(searchParams?.toString() || "");
-    params.set("page", pageNumber.toString());
+    params.set(queryParam, pageNumber.toString());
     startTransition(() => {
       router.push(`/?${params.toString()}`, { scroll: false });
     });
