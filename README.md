@@ -1,6 +1,10 @@
 # Teste Frontend - Viajar Faz Bem
 
-Desenvolvi essa aplicação em resposta ao desafio proposto pela Coobrastur, para explorar um catálogo de filmes fornecido pela API TMDB. O app cumpre com os requisitos exigidos e amplia as funcionalidades com filtros avançados, como por diretor e ator; possui paginação inteligente para driblar as limitações impostas pela API, evitando erros excessivos 429 (Too Many Requests).
+IMPORTANTE: Tomei a liberdade para modificar o layout, porque isso é apenas um teste e preciso mostrar mais a minha capacidade criativa, se fosse um projeto real, com design definido, eu seguiria exatamente o guideline e o levantamento de requisitos aprovados. O save dos vídeo favoritos e lista dos filmes que "Continuar assistindo", estão sendo armazenados em localstorage, mas de forma nenhuma eu faria isso em um projeto real, armazenaria com segurança no banco de dados.
+
+Essa API possui muitas limitações de requisições, então fiz uma implementação simplificada para performance.
+
+---
 
 Subi o projeto para produção em meu servidor local, você pode acessar em
 [https://teste.pedro-sperandio.com.br](https://teste.pedro-sperandio.com.br)

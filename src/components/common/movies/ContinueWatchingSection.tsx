@@ -38,7 +38,7 @@ export function ContinueWatchingSection() {
   const currentMovies = watchHistory.slice((page - 1) * limit, page * limit);
 
   return (
-    <section className="container mx-auto px-4 w-full mb-12">
+    <section className="container mx-auto px-4 w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold tracking-tight">
@@ -57,7 +57,7 @@ export function ContinueWatchingSection() {
       </div>
 
       {totalPages > 1 && (
-        <div className="w-full flex flex-col md:flex-row items-center justify-between mt-8 py-4">
+        <div className="w-full flex flex-col md:flex-row items-center justify-between py-8">
           <Pagination 
             currentPage={page} 
             totalPages={totalPages} 

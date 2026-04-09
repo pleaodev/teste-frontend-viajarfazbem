@@ -68,6 +68,38 @@ export interface FilmographyResponse {
 }
 
 // Helper genérico para fazer chamadas à API da IMDb
+
+const clientCache = new Map<string, any>();
+const inFlightRequests = new Map<string, Promise<any>>();
+
+class RequestQueue {
+  private queue: (() => void)[] = [];
+  private activeCount = 0;
+  private maxConcurrent = 2; // Limitando a 2 requisições simultâneas para evitar 429
+  private delayBetweenRequests = 500; // 500ms de delay antes de liberar a vaga
+
+  async enqueue<T>(task: () => Promise<T>): Promise<T> {
+    if (this.activeCount >= this.maxConcurrent) {
+      await new Promise<void>(resolve => this.queue.push(resolve));
+    }
+    
+    this.activeCount++;
+    try {
+      return await task();
+    } finally {
+      setTimeout(() => {
+        this.activeCount--;
+        if (this.queue.length > 0) {
+          const next = this.queue.shift();
+          if (next) next();
+        }
+      }, this.delayBetweenRequests);
+    }
+  }
+}
+
+const requestQueue = new RequestQueue();
+
 async function fetchImdb<T>(endpoint: string, params?: Record<string, string | number>): Promise<T> {
   const url = new URL(`${API_BASE_URL}${endpoint}`);
   
@@ -79,15 +111,43 @@ async function fetchImdb<T>(endpoint: string, params?: Record<string, string | n
     });
   }
 
-  const response = await fetch(url.toString(), {
-    next: { revalidate: 3600 } 
-  });
+  const urlString = url.toString();
 
-  if (!response.ok) {
-    throw new Error(`Erro na API IMDb: ${response.status} ${response.statusText}`);
+  if (typeof window !== 'undefined') {
+    if (clientCache.has(urlString)) {
+      return clientCache.get(urlString);
+    }
+    if (inFlightRequests.has(urlString)) {
+      return inFlightRequests.get(urlString);
+    }
   }
 
-  return response.json();
+  const fetchPromise = requestQueue.enqueue(async () => {
+    const response = await fetch(urlString, {
+      next: { revalidate: 3600 } 
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro na API IMDb: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (typeof window !== 'undefined') {
+      clientCache.set(urlString, data);
+    }
+    return data;
+  });
+
+  if (typeof window !== 'undefined') {
+    inFlightRequests.set(urlString, fetchPromise);
+    try {
+      await fetchPromise;
+    } finally {
+      inFlightRequests.delete(urlString);
+    }
+  }
+
+  return fetchPromise;
 }
 
 // Lista títulos
@@ -111,15 +171,43 @@ export async function batchGetTitles(titleIds: string[]): Promise<TitlesResponse
   const url = new URL(`${API_BASE_URL}/titles:batchGet`);
   titleIds.forEach(id => url.searchParams.append("title_ids", id));
   
-  const response = await fetch(url.toString(), {
-    next: { revalidate: 3600 }
-  });
+  const urlString = url.toString();
 
-  if (!response.ok) {
-    throw new Error(`Erro na API IMDb: ${response.status} ${response.statusText}`);
+  if (typeof window !== 'undefined') {
+    if (clientCache.has(urlString)) {
+      return clientCache.get(urlString);
+    }
+    if (inFlightRequests.has(urlString)) {
+      return inFlightRequests.get(urlString);
+    }
   }
 
-  return response.json();
+  const fetchPromise = requestQueue.enqueue(async () => {
+    const response = await fetch(urlString, {
+      next: { revalidate: 3600 }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro na API IMDb: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (typeof window !== 'undefined') {
+      clientCache.set(urlString, data);
+    }
+    return data;
+  });
+
+  if (typeof window !== 'undefined') {
+    inFlightRequests.set(urlString, fetchPromise);
+    try {
+      await fetchPromise;
+    } finally {
+      inFlightRequests.delete(urlString);
+    }
+  }
+
+  return fetchPromise;
 }
 
 //Busca títulos por texto

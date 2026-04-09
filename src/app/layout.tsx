@@ -10,6 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://teste.pedro-sperandio.com.br"),
   title: {
     template: "%s | ViajarFazBem",
     default: "ViajarFazBem - Filmes e Séries",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ViajarFazBem - Filmes e Séries",
     description: "Sua plataforma para viajar nos melhores filmes e séries. Descubra lançamentos, clássicos e muito mais.",
-    url: "https://viajarfazbem.com",
+    url: "https://teste.pedro-sperandio.com.br",
     siteName: "ViajarFazBem",
     images: [
       {

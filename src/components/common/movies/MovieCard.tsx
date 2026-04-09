@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Film, Info, Heart, Play } from "lucide-react";
@@ -30,6 +30,7 @@ export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { addToHistory } = useWatchHistory();
   const favorite = isFavorite(movie.id);
+  const cardRef = useRef<HTMLElement>(null);
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -79,7 +80,10 @@ export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   }, [isActorDialogOpen]);
 
   useEffect(() => {
+    if (!cardRef.current) return;
+
     let isMounted = true;
+    let observer: IntersectionObserver;
 
     const fetchActorsSilently = async () => {
       try {
@@ -96,10 +100,21 @@ export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
       }
     };
 
-    fetchActorsSilently();
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchActorsSilently();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" } // Fetch before it comes fully into view
+    );
+
+    observer.observe(cardRef.current);
 
     return () => {
       isMounted = false;
+      if (observer) observer.disconnect();
     };
   }, [movie.id]);
 
@@ -127,6 +142,7 @@ export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   return (
     <>
       <article 
+      ref={cardRef}
       itemScope 
       itemType="https://schema.org/Movie"
       className="group relative flex flex-col h-full overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg outline-none"

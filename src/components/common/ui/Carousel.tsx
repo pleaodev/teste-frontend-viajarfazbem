@@ -24,7 +24,7 @@ export function Carousel({ items }: CarouselProps) {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { addToHistory } = useWatchHistory();
+  const { addToHistory, watchHistory } = useWatchHistory();
   
   // Dialog State de Atores
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
@@ -176,11 +176,11 @@ export function Carousel({ items }: CarouselProps) {
                     <Link 
                       href={`/player?title=${encodeURIComponent(item.primaryTitle)}`}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_15px_rgba(2,132,199,0.5)]"
-                      aria-label={`Assistir ${item.primaryTitle}`}
+                      aria-label={`${watchHistory.some(h => h.id === item.id) ? 'Continuar assistindo' : 'Assistir'} ${item.primaryTitle}`}
                       onClick={() => addToHistory(item)}
                     >
                       <PlayCircle className="w-5 h-5" aria-hidden="true" />
-                      Assistir
+                      {watchHistory.some(h => h.id === item.id) ? "Continuar" : "Assistir"}
                     </Link>
                     <button 
                       onClick={() => handleOpenDetails(item)}
