@@ -8,6 +8,8 @@ export * from './providers/ThemeProvider';
 export * from './providers/LenisProvider';
 export * from './providers/FavoritesProvider';
 export * from './ui/ThemeToggle';
+export * from './ui/NotificationButton';
+export * from './ui/MoreOptionsDropdown';
 export * from './ui/Carousel';
 export * from './ui/ScrollToTop';
 export * from './ui/Pagination';

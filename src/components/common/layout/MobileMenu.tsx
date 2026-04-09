@@ -57,7 +57,7 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
   };
 
   return (
-    <div className="md:hidden flex items-center">
+    <div className="lg:hidden flex items-center">
       <IconButton 
         onClick={toggleMainMenu}
         sx={{ color: 'var(--foreground)' }}
