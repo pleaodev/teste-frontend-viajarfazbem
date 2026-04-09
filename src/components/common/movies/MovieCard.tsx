@@ -14,9 +14,10 @@ import { useWatchHistory } from "../providers/WatchHistoryProvider";
 interface MovieCardProps {
   movie: Title;
   variant?: "default" | "continue";
+  priority?: boolean;
 }
 
-export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
+export function MovieCard({ movie, variant = "default", priority = false }: MovieCardProps) {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
@@ -179,6 +180,7 @@ export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover/image:scale-105 will-change-transform [backface-visibility:hidden]"
           onError={() => setImgError(true)}
+          priority={priority}
         />
         
         {/* Rating Flutuante */}
