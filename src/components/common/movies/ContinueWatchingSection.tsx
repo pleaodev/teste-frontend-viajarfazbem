@@ -57,7 +57,7 @@ export function ContinueWatchingSection() {
       </div>
 
       {totalPages > 1 && (
-        <div className="w-full flex flex-col md:flex-row items-center justify-between mt-8 py-4">
+        <div className="w-full flex flex-col md:flex-row items-center justify-between py-8">
           <Pagination 
             currentPage={page} 
             totalPages={totalPages} 
