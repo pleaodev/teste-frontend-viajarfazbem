@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, Star, Calendar, Clock, Info, Users, Clapperboard } from "lucide-react";
+import Link from "next/link";
+import { X, Star, Calendar, Clock, Info, Users, Clapperboard, Heart, PlayCircle } from "lucide-react";
 import { Title, TitleDetails } from "@/services/imdb";
 import { CircularProgress } from "@mui/material";
+import { useFavorites } from "../providers/FavoritesProvider";
 
 interface MovieDetailsDialogProps {
   isOpen: boolean;
@@ -27,8 +29,8 @@ export function MovieDetailsDialog({
   onOpenActor 
 }: MovieDetailsDialogProps) {
   const [isClosing, setIsClosing] = useState(false);
-
   const [mounted, setMounted] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     setMounted(true);
@@ -83,7 +85,7 @@ export function MovieDetailsDialog({
         ) : (
           <div className="flex flex-col md:flex-row">
             {/* Imagem do Filme */}
-            <div className="w-full md:w-[40%] relative aspect-[2/3] md:aspect-auto md:min-h-[600px] bg-muted shrink-0">
+            <div className="w-full md:w-[40%] relative aspect-[2/3] md:aspect-auto md:min-h-[600px] bg-muted shrink-0 group">
               {movie.primaryImage?.url ? (
                 <Image 
                   src={movie.primaryImage.url} 
@@ -97,6 +99,20 @@ export function MovieDetailsDialog({
                   <Clapperboard className="h-16 w-16 opacity-50" />
                 </div>
               )}
+              {/* Botão de Favoritar */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(movie);
+                }}
+                className={`absolute top-4 left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 cursor-pointer ${isFavorite(movie.id) ? 'bg-black/60' : 'bg-black/40 hover:bg-black/60'} shadow-lg`}
+                aria-label={isFavorite(movie.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                aria-pressed={isFavorite(movie.id)}
+              >
+                <Heart 
+                  className={`w-5 h-5 transition-all duration-300 ${isFavorite(movie.id) ? 'fill-red-500 text-red-500 scale-110' : 'text-white scale-100'}`} 
+                />
+              </button>
               {/* Degradê para transição suave na versão mobile */}
               <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent md:hidden" />
             </div>
@@ -122,6 +138,15 @@ export function MovieDetailsDialog({
                     <Star className="h-4 w-4 fill-current" />
                     {rating}
                   </span>
+                  <Link 
+                    href={`/player?title=${encodeURIComponent(movie.primaryTitle)}`}
+                    className="flex items-center justify-center gap-2 px-4 py-1 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_10px_rgba(2,132,199,0.3)] ml-auto md:ml-0"
+                    aria-label={`Assistir ${movie.primaryTitle}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <PlayCircle className="w-4 h-4 fill-current" aria-hidden="true" />
+                    Assistir
+                  </Link>
                 </div>
               </div>
 

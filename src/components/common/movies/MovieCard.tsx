@@ -161,7 +161,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         />
         
         {/* Rating Flutuante */}
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 backdrop-blur-md px-2.5 py-1 text-sm font-medium text-yellow-500 border border-white/10 shadow-sm">
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 backdrop-blur-md px-2.5 py-1 text-sm font-medium text-yellow-500 border-none shadow-sm z-10">
           <Star className="h-3.5 w-3.5 fill-current" />
           <span>{rating}</span>
         </div>
@@ -169,11 +169,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         {/* Botão Favoritar (Coração) */}
         <button
           onClick={handleToggleFavorite}
-          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${favorite ? 'bg-black/40 hover:bg-black/60' : 'bg-black/20 hover:bg-black/50 text-white/90 hover:text-white'}`}
+          className={`absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 border-none ${favorite ? 'bg-black/60' : 'bg-black/40 hover:bg-black/60 text-white/90 hover:text-white'}`}
           aria-label={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
           aria-pressed={favorite}
         >
-          <Heart className={`h-4 w-4 transition-colors duration-300 ${favorite ? 'fill-red-500 text-red-500' : 'fill-transparent'}`} />
+          <Heart className={`h-4 w-4 transition-colors duration-300 ${favorite ? 'fill-red-500 text-red-500' : 'text-white scale-100'}`} />
         </button>
 
         {/* Avatares Flutuantes dos Atores */}

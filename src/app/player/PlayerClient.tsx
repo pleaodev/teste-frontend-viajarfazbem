@@ -17,7 +17,7 @@ export function PlayerClient({ title }: { title: string }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
 
-  // generic video for testing (using a reliable HTTPS source to avoid mixed content or unsupported sources)
+  // Vídeo genérico para teste
   const videoUrl = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4";
 
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -128,7 +128,7 @@ export function PlayerClient({ title }: { title: string }) {
         Seu navegador não suporta o elemento de vídeo.
       </video>
 
-      {/* Central Play/Pause overlay */}
+      {/* Box Play/Pause overlay */}
       {!isPlaying && (
         <button 
           onClick={togglePlay}
@@ -149,7 +149,7 @@ export function PlayerClient({ title }: { title: string }) {
         <h1 className="text-white font-medium text-lg drop-shadow-md">Assistindo: {title}</h1>
       </div>
 
-      {/* Controls overlay */}
+      {/* Controles overlay */}
       <div className={`absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
         
         {/* Progress Bar */}
@@ -169,7 +169,7 @@ export function PlayerClient({ title }: { title: string }) {
           <span className="text-white text-sm font-medium w-12">{formatTime(duration)}</span>
         </div>
 
-        {/* Controls */}
+        {/* Controles */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <button onClick={togglePlay} className="text-white hover:text-sky-400 transition-colors focus:outline-none">

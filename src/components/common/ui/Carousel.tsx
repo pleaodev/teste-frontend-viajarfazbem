@@ -166,6 +166,14 @@ export function Carousel({ items }: CarouselProps) {
                   </p>
                   
                   <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <Link 
+                      href={`/player?title=${encodeURIComponent(item.primaryTitle)}`}
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_15px_rgba(2,132,199,0.5)]"
+                      aria-label={`Assistir ${item.primaryTitle}`}
+                    >
+                      <PlayCircle className="w-5 h-5" aria-hidden="true" />
+                      Assistir
+                    </Link>
                     <button 
                       onClick={() => handleOpenDetails(item)}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-background/60 hover:bg-white hover:text-black text-foreground/90 font-semibold rounded-md backdrop-blur-sm border border-foreground/20 transition-all cursor-pointer"
@@ -182,14 +190,6 @@ export function Carousel({ items }: CarouselProps) {
                       <Film className="w-5 h-5" aria-hidden="true" />
                       Trailer
                     </button>
-                    <Link 
-                      href={`/player?title=${encodeURIComponent(item.primaryTitle)}`}
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_15px_rgba(2,132,199,0.5)]"
-                      aria-label={`Assistir ${item.primaryTitle}`}
-                    >
-                      <PlayCircle className="w-5 h-5" aria-hidden="true" />
-                      Assistir
-                    </Link>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
