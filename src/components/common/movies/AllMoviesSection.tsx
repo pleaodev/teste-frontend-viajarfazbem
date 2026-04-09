@@ -32,7 +32,7 @@ async function AllMoviesList({ q, type, startYear, endYear, genre, page, limit, 
     // Se for pesquisa, a API searchTitles não aceita limite tão fácil, então fatiamos o resultado
     if (q) {
       const searchRes = await searchTitles(q);
-      filteredMovies = searchRes.results || [];
+      filteredMovies = searchRes.titles || [];
     } else {
       const filterRes = await getTitles({
         titleType: type,

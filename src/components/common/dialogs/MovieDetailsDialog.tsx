@@ -8,6 +8,7 @@ import { X, Star, Calendar, Clock, Info, Users, Clapperboard, Heart, Play } from
 import { Title, TitleDetails } from "@/services/imdb";
 import { CircularProgress } from "@mui/material";
 import { useFavorites } from "../providers/FavoritesProvider";
+import { useWatchHistory } from "../providers/WatchHistoryProvider";
 
 interface MovieDetailsDialogProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export function MovieDetailsDialog({
   const [isClosing, setIsClosing] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToHistory } = useWatchHistory();
 
   useEffect(() => {
     setMounted(true);
@@ -142,7 +144,10 @@ export function MovieDetailsDialog({
                     href={`/player?title=${encodeURIComponent(movie.primaryTitle)}`}
                     className="flex items-center justify-center gap-2 px-4 py-1 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_10px_rgba(2,132,199,0.3)] ml-auto md:ml-0"
                     aria-label={`Assistir ${movie.primaryTitle}`}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToHistory(movie);
+                    }}
                   >
                     <Play className="w-4 h-4 fill-current" aria-hidden="true" />
                     Assistir

@@ -1,5 +1,5 @@
 import { getTitles } from "@/services/imdb";
-import { Carousel, AllMoviesSection, ActorMoviesSection, DirectorMoviesSection, TrendingMoviesSection } from "@/components/common";
+import { Carousel, AllMoviesSection, ActorMoviesSection, DirectorMoviesSection, TrendingMoviesSection, ContinueWatchingSection } from "@/components/common";
 import Link from "next/link";
 
 export default async function Home({
@@ -77,6 +77,9 @@ export default async function Home({
 
         <Carousel items={topMovies} />
       </section>
+      
+      {/* Seção de Continuar Assistindo */}
+      <ContinueWatchingSection />
       
       {/* Seção de Tendências */}
       <TrendingMoviesSection searchParams={searchParams} />

@@ -2,18 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, Film, Info, Heart } from "lucide-react";
+import Link from "next/link";
+import { Star, Film, Info, Heart, Play } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { ActorDialog } from "../dialogs/ActorDialog";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
 import { useFavorites } from "../providers/FavoritesProvider";
+import { useWatchHistory } from "../providers/WatchHistoryProvider";
 
 interface MovieCardProps {
   movie: Title;
+  variant?: "default" | "continue";
 }
 
-export function MovieCard({ movie }: MovieCardProps) {
+export function MovieCard({ movie, variant = "default" }: MovieCardProps) {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [movieDetails, setMovieDetails] = useState<TitleDetails | null>(null);
@@ -25,6 +28,7 @@ export function MovieCard({ movie }: MovieCardProps) {
   const [selectedActorId, setSelectedActorId] = useState<string | null>(null);
   const [isActorDialogOpen, setIsActorDialogOpen] = useState(false);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToHistory } = useWatchHistory();
   const favorite = isFavorite(movie.id);
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
@@ -60,6 +64,7 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   const handleTrailerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    addToHistory(movie); // Registra no histórico ao assistir/trailer
     setIsTrailerOpen(true);
   };
 
@@ -259,15 +264,32 @@ export function MovieCard({ movie }: MovieCardProps) {
             <Info className="h-4 w-4" aria-hidden="true" />
             Ver Mais
           </button>
-          <button 
-            onClick={handleTrailerClick}
-            className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1"
-            title="Assistir Trailer"
-            aria-label={`Assistir trailer de ${movie.primaryTitle}`}
-          >
-            <Film className="h-4 w-4" aria-hidden="true" />
-            <span className="md:hidden xl:inline">Trailer</span>
-          </button>
+          
+          {variant === "continue" ? (
+            <Link 
+              href={`/player?title=${encodeURIComponent(movie.primaryTitle)}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                addToHistory(movie);
+              }}
+              className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1 shadow-[0_0_10px_rgba(2,132,199,0.3)]"
+              title="Continuar Assistindo"
+              aria-label={`Continuar assistindo ${movie.primaryTitle}`}
+            >
+              <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+              <span className="md:hidden xl:inline">Continuar</span>
+            </Link>
+          ) : (
+            <button 
+              onClick={handleTrailerClick}
+              className="flex h-[42px] px-4 items-center justify-center gap-2 rounded-md bg-muted/50 hover:bg-white hover:text-black text-foreground border border-border py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer flex-1 md:flex-none xl:flex-1"
+              title="Assistir Trailer"
+              aria-label={`Assistir trailer de ${movie.primaryTitle}`}
+            >
+              <Film className="h-4 w-4" aria-hidden="true" />
+              <span className="md:hidden xl:inline">Trailer</span>
+            </button>
+          )}
         </div>
       </div>
     </article>
