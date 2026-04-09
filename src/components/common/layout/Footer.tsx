@@ -14,7 +14,8 @@ export function Footer() {
                 width={150} 
                 height={41} 
                 priority
-                className="w-[150px] h-[41px] dark:brightness-0 dark:invert"
+                style={{ width: 'auto', height: 'auto' }}
+                className="!w-[150px] !h-[41px] dark:brightness-0 dark:invert"
               />
             </Link>
             <p className="text-base md:text-sm text-muted-foreground mt-5">

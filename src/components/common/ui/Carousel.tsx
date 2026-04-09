@@ -132,7 +132,8 @@ export function Carousel({ items }: CarouselProps) {
                   fill
                   sizes="100vw"
                   className="object-cover"
-                  priority={index === 0}
+                  priority={index < 3}
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent dark:via-background/60" />
                 <div className="absolute inset-0 w-full md:w-3/4 lg:w-2/3 bg-gradient-to-r from-background/95 via-background/70 to-transparent dark:from-background/90 dark:via-background/40" />

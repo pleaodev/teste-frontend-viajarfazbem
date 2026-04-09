@@ -177,7 +177,7 @@ export function MovieCard({ movie, variant = "default", priority = false }: Movi
           src={image}
           alt={movie.primaryTitle}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           className="object-cover transition-transform duration-500 ease-out scale-[1.01] group-hover/image:scale-105 will-change-transform [backface-visibility:hidden]"
           onError={() => setImgError(true)}
           priority={priority}

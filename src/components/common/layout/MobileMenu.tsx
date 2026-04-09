@@ -83,8 +83,8 @@ export function MobileMenu({ topMovies, latestMovies, classicMovies }: MobileMen
               alt="ViajarFazBem Logo" 
               width={100} 
               height={26} 
-              style={{ width: '100px', height: 'auto' }}
-              className="dark:brightness-0 dark:invert"
+              style={{ width: 'auto', height: 'auto' }}
+              className="w-[100px] h-[26px] dark:brightness-0 dark:invert"
             />
           </Link>
         }
