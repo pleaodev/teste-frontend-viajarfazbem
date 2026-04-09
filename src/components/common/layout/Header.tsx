@@ -46,7 +46,7 @@ export async function Header() {
             width={120} 
             height={32} 
             priority
-            className="w-auto h-8 dark:brightness-0 dark:invert"
+            className="w-[120px] h-[32px] dark:brightness-0 dark:invert"
           />
         </Link>
         <Link href="/" className="lg:hidden">
@@ -56,7 +56,7 @@ export async function Header() {
             width={100} 
             height={26} 
             priority
-            className="w-[100px] h-auto dark:brightness-0 dark:invert"
+            className="w-[100px] h-[26px] dark:brightness-0 dark:invert"
           />
         </Link>
       </div>

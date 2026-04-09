@@ -82,8 +82,8 @@ async function TrendingMoviesList({ type, page, limit }: any) {
     return (
       <>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {listMovies.map((movie: any) => (
-            <MovieCard key={movie.id} movie={movie} />
+          {listMovies.map((movie: any, index: number) => (
+            <MovieCard key={movie.id} movie={movie} priority={index < 4} />
           ))}
         </div>
         
