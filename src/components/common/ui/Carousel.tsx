@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star, Info, Film, Heart } from "lucide-react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, Star, Info, Film, Heart, PlayCircle } from "lucide-react";
 import { Title, TitleDetails, getTitleDetails } from "@/services/imdb";
 import { TrailerDialog } from "../dialogs/TrailerDialog";
 import { MovieDetailsDialog } from "../dialogs/MovieDetailsDialog";
@@ -181,6 +182,14 @@ export function Carousel({ items }: CarouselProps) {
                       <Film className="w-5 h-5" aria-hidden="true" />
                       Trailer
                     </button>
+                    <Link 
+                      href={`/player?title=${encodeURIComponent(item.primaryTitle)}`}
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-md transition-all cursor-pointer shadow-[0_0_15px_rgba(2,132,199,0.5)]"
+                      aria-label={`Assistir ${item.primaryTitle}`}
+                    >
+                      <PlayCircle className="w-5 h-5" aria-hidden="true" />
+                      Assistir
+                    </Link>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
